@@ -1,0 +1,33 @@
+{
+  "total_modificaciones": 2,
+  "modificaciones_respaldadas_por_fuentes": true,
+  "afirmaciones_infundadas_eliminadas": true,
+  "competencia_autoridad_sanitaria_preservada": true,
+  "requiere_revision_humana_previa_firma": true,
+  "notas_auditoria": [
+    "Control de trazabilidad: Se contrastaron los artículos 6 y 8 del Proyecto de Ley con las observaciones de la Defensoría.",
+    "Principio de legalidad y competencia: Se salvaguarda la potestad técnica del Ministerio de Salud Pública (Art. 32 CRE y Ley Orgánica de Salud).",
+    "Enfoque de Derechos Humanos: Se incorporan igualdad, no discriminación, pertinencia cultural y territorial, y accesibilidad económica (Art. 13 CRE).",
+    "Principio de precaución metodológica: Todo cambio queda marcado como 'PENDIENTE DE REVISIÓN TÉCNICA' para validación del personal técnico-jurídico antes de la suscripción oficial."
+  ],
+  "cambios": [
+    {
+      "ubicacion": "Informe DPE - Sección Análisis del Artículo 8",
+      "texto_original": "El artículo 8 del proyecto dispone que la guía alimentaria nacional priorizará de forma obligatoria el consumo de proteína de alto valor biológico en todos los planes y programas nacionales.",
+      "observacion": "La fijación legislativa rígida de una jerarquía nutricional limita la discrecionalidad y facultad técnica privativa de la Autoridad Sanitaria Nacional (Ministerio de Salud Pública).",
+      "justificacion": "Conforme al Art. 32 de la Constitución de la República del Ecuador y la Ley Orgánica de Salud, la rectoría en salud y nutrición corresponde exclusivamente a la autoridad sanitaria nacional, la cual debe basar sus directrices en evidencia científica actualizada, etapas del ciclo vital, pertinencia cultural y accesibilidad.",
+      "propuesta_redaccion": "Se recomienda que el artículo 8 preserve la facultad de la autoridad sanitaria nacional para actualizar las recomendaciones sobre los grupos de alimentos según la evidencia disponible, la etapa de vida, la diversidad cultural y las condiciones de acceso de la población.",
+      "estado_validacion": "PENDIENTE DE REVISIÓN TÉCNICA",
+      "fuente_respaldo": "Proyecto de Ley (Art. 8) y Documento Institucional de Observaciones (observaciones_institucionales.docx)"
+    },
+    {
+      "ubicacion": "Informe DPE - Sección Conclusiones - Conclusión Quinta",
+      "texto_original": "Quinta.- Se considera que la jerarquización obligatoria establecida en el articulado podría obstaculizar el ejercicio efectivo del derecho a la salud de las personas y grupos de atención prioritaria, al desatender las particularidades alimentarias territoriales.",
+      "observacion": "La redacción original contiene una valoración genérica y no fundamentada ('podría obstaculizar el ejercicio efectivo del derecho a la salud'), que no precisa la solución técnica legislativa ni vincula la garantía con el Art. 6 del proyecto.",
+      "justificacion": "Sustitución técnica conforme a los estándares de la Defensoría del Pueblo (Art. 215 CRE): Se vincula la facultad técnica de la autoridad sanitaria con la prohibición de jerarquías nutricionales rígidas, salvaguardando los principios de igualdad, pertinencia cultural, territorialidad, accesibilidad económica (Art. 13 CRE) y la orientación nutricional individualizada (Art. 6 del Proyecto).",
+      "propuesta_redaccion": "Quinta.- Se recomienda que el artículo 8 preserve expresamente la facultad técnica y privativa de la Autoridad Sanitaria Nacional para definir y actualizar periódicamente las guías alimentarias nacionales sobre la base de la mejor evidencia científica disponible, evitando que la ley consagre una jerarquización nutricional invariable o excluyente de determinados alimentos. Esta regulación debe armonizarse con los principios de igualdad, no discriminación, pertinencia cultural y territorial, así como con la disponibilidad y accesibilidad económica de los alimentos, garantizando plenamente el derecho a la orientación nutricional individualizada consagrado en el artículo 6 del presente proyecto de ley.",
+      "estado_validacion": "PENDIENTE DE REVISIÓN TÉCNICA",
+      "fuente_respaldo": "Proyecto de Ley (Arts. 6 y 8), CRE (Arts. 13, 32 y 215) y Guías Alimentarias del Ecuador (GABA)"
+    }
+  ]
+}

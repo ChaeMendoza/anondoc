@@ -1,0 +1,27 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Pruebas y cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Salidas temporales generadas
+doc_conv_*/
+*.tmp
+
+# Archivos de sistema / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
