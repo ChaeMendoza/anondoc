@@ -6,12 +6,28 @@
 // Application State
 const state = {
   currentJobId: null,
+  accessToken: null,
   currentFilename: "",
   entities: [],
   categories: [],
   activeCategoryFilter: "ALL",
   activeConfidenceFilter: "ALL"
 };
+
+// Every job request carries the secret access token issued at upload.
+function authFetch(url, options = {}) {
+  const headers = Object.assign({}, options.headers, { Authorization: `Bearer ${state.accessToken}` });
+  return fetch(url, Object.assign({}, options, { headers }));
+}
+
+async function errorMessage(res, fallback) {
+  try {
+    const err = await res.json();
+    return err.detail || fallback;
+  } catch (_) {
+    return fallback;
+  }
+}
 
 // DOM Elements
 const uploadSection = document.getElementById("uploadSection");
@@ -126,25 +142,24 @@ async function handleFileUpload(file) {
     });
 
     if (!uploadRes.ok) {
-      const err = await uploadRes.json();
-      throw new Error(err.detail || "Error al cargar documento.");
+      throw new Error(await errorMessage(uploadRes, "Error al cargar documento."));
     }
 
     const uploadData = await uploadRes.json();
     state.currentJobId = uploadData.job_id;
+    state.accessToken = uploadData.access_token;
     state.currentFilename = uploadData.filename;
 
     progressBar.style.width = "65%";
     progressText.textContent = "Extrayendo texto y detectando información sensible (PII)...";
 
     // 2. Trigger Analysis
-    const analyzeRes = await fetch(`/api/v1/documents/${state.currentJobId}/analyze`, {
+    const analyzeRes = await authFetch(`/api/v1/documents/${state.currentJobId}/analyze`, {
       method: "POST"
     });
 
     if (!analyzeRes.ok) {
-      const err = await analyzeRes.json();
-      throw new Error(err.detail || "Error durante el análisis.");
+      throw new Error(await errorMessage(analyzeRes, "Error durante el análisis."));
     }
 
     const analysisData = await analyzeRes.json();
@@ -215,10 +230,10 @@ function renderEntitiesTable() {
 
     tr.innerHTML = `
       <td>
-        <input type="checkbox" data-id="${entity.id}" class="entity-chk" ${entity.selected ? "checked" : ""}>
+        <input type="checkbox" data-id="${escapeHtml(entity.id)}" class="entity-chk" ${entity.selected ? "checked" : ""}>
       </td>
       <td>
-        <span class="badge-category">${CATEGORY_LABELS[entity.category] || entity.category}</span>
+        <span class="badge-category">${escapeHtml(CATEGORY_LABELS[entity.category] || entity.category)}</span>
       </td>
       <td>
         <div class="cell-entity-text">${escapeHtml(entity.original_text)}</div>
@@ -226,10 +241,10 @@ function renderEntitiesTable() {
       </td>
       <td>${escapeHtml(entity.page_or_section)}</td>
       <td>
-        <span class="badge-confidence ${entity.confidence}">${entity.confidence}</span>
+        <span class="badge-confidence ${escapeHtml(entity.confidence)}">${escapeHtml(entity.confidence)}</span>
       </td>
       <td>
-        <button class="btn-danger-icon" title="Eliminar falso positivo" onclick="deleteEntity('${entity.id}')">✕</button>
+        <button class="btn-danger-icon" title="Eliminar falso positivo" data-delete-id="${escapeHtml(entity.id)}">✕</button>
       </td>
     `;
     entitiesTableBody.appendChild(tr);
@@ -248,6 +263,11 @@ function renderEntitiesTable() {
 }
 
 // Global actions
+entitiesTableBody.addEventListener("click", (ev) => {
+  const btn = ev.target.closest("[data-delete-id]");
+  if (btn) deleteEntity(btn.dataset.deleteId);
+});
+
 function deleteEntity(id) {
   state.entities = state.entities.filter(e => e.id !== id);
   updateMetrics();
@@ -319,7 +339,7 @@ btnExecuteAnonymization.addEventListener("click", async () => {
 
   try {
     // 1. Sync updated entities
-    await fetch(`/api/v1/documents/${state.currentJobId}/detections`, {
+    await authFetch(`/api/v1/documents/${state.currentJobId}/detections`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ entities: state.entities })
@@ -329,7 +349,7 @@ btnExecuteAnonymization.addEventListener("click", async () => {
     const selectedStrategy = document.querySelector('input[name="strategy"]:checked').value;
     const placeholder = customPlaceholder.value.trim() || null;
 
-    const res = await fetch(`/api/v1/documents/${state.currentJobId}/anonymize`, {
+    const res = await authFetch(`/api/v1/documents/${state.currentJobId}/anonymize`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -339,8 +359,7 @@ btnExecuteAnonymization.addEventListener("click", async () => {
     });
 
     if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.detail || "Error en la anonimización.");
+      throw new Error(await errorMessage(res, "Error en la anonimización."));
     }
 
     const resultData = await res.json();
@@ -358,7 +377,7 @@ btnExecuteAnonymization.addEventListener("click", async () => {
 function renderResultView(data) {
   resStrategy.textContent = data.strategy_used;
   resCount.textContent = `${data.total_anonymized} elementos anonimizados`;
-  btnDownload.href = data.download_url;
+  btnDownload.dataset.url = data.download_url;
 
   if (data.warnings && data.warnings.length > 0) {
     resWarnings.style.display = "block";
@@ -371,8 +390,31 @@ function renderResultView(data) {
   resultSection.classList.add("active");
 }
 
+btnDownload.addEventListener("click", async (ev) => {
+  ev.preventDefault();
+  try {
+    const res = await authFetch(btnDownload.dataset.url);
+    if (!res.ok) throw new Error(await errorMessage(res, "No se pudo descargar el documento."));
+    const blob = await res.blob();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `anonimizado_${state.currentJobId.slice(0, 8)}.${blob.type === "application/pdf" ? "pdf" : "docx"}`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 10000);
+  } catch (error) {
+    alert(`Error: ${error.message}`);
+  }
+});
+
 function resetToUpload() {
+  if (state.currentJobId && state.accessToken) {
+    // Best-effort immediate deletion of the server-side job.
+    authFetch(`/api/v1/documents/${state.currentJobId}`, { method: "DELETE" }).catch(() => {});
+  }
   state.currentJobId = null;
+  state.accessToken = null;
   state.currentFilename = "";
   state.entities = [];
   fileInput.value = "";
@@ -387,6 +429,6 @@ function resetToUpload() {
 function escapeHtml(text) {
   if (!text) return "";
   const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
+  div.textContent = String(text);
+  return div.innerHTML.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }

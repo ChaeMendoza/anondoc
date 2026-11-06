@@ -3,7 +3,6 @@ Comprehensive Test Suite for AnonDoc v2.0.
 Verifies Domain Validators, PII Detection, Native Redaction, Security, and REST API.
 """
 import io
-import os
 from pathlib import Path
 import pytest
 import pymupdf
@@ -12,17 +11,16 @@ from fastapi.testclient import TestClient
 
 from anondoc.domain.entities import (
     EntityCategory,
-    DetectionConfidence,
     AnonymizationStrategy,
     PIIEntity
 )
 from anondoc.domain.validators import PIIValidators
-from anondoc.infrastructure.detection.context_analyzer import ContextAnalyzer
 from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
 from anondoc.infrastructure.anonymization.anonymizer import AnonymizationStrategyEngine
 from anondoc.infrastructure.storage.temp_storage import SecureStorageService
 from anondoc.infrastructure.engines.pdf_engine import PDFEngine
 from anondoc.infrastructure.engines.docx_engine import DOCXEngine
+from anondoc.infrastructure.security.inspector import DocumentRejected, detect_format
 from anondoc.main import app
 
 client = TestClient(app)
@@ -139,13 +137,9 @@ def test_storage_security_path_traversal(tmp_path):
     with pytest.raises(ValueError):
         storage.get_job_dir("../../etc/cron.d")
 
-def test_storage_magic_bytes_check(tmp_path):
-    storage = SecureStorageService(base_dir=tmp_path)
-    # Intento de subir archivo con extensión .pdf pero contenido de script bash
-    fake_pdf = b"#!/bin/bash\necho 'hacked'"
-    valid, msg = storage.validate_file_security(fake_pdf, "malicious.pdf")
-    assert valid is False
-    assert "magic bytes" in msg.lower()
+def test_format_detection_ignores_extension():
+    with pytest.raises(DocumentRejected):
+        detect_format(b"#!/bin/bash\necho 'hacked'")
 
 # -------------------------------------------------------------
 # 5. PRUEBAS DE MOTOR DOCUMENTAL PDF (REDACCIÓN FÍSICA Y VERIFICACIÓN)
@@ -256,6 +250,7 @@ def test_rest_api_e2e_flow(tmp_path):
     upload_data = upload_res.json()
     job_id = upload_data["job_id"]
     assert job_id is not None
+    client.headers["Authorization"] = f"Bearer {upload_data['access_token']}"
 
     # 3. Analyze: POST /api/v1/documents/{job_id}/analyze
     analyze_res = client.post(f"/api/v1/documents/{job_id}/analyze")
@@ -309,3 +304,4 @@ def test_rest_api_e2e_flow(tmp_path):
     health_res = client.get("/api/v1/health")
     assert health_res.status_code == 200
     assert health_res.json()["status"] == "healthy"
+    client.headers.pop("Authorization")

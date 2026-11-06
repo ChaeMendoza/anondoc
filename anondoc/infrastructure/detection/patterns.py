@@ -6,7 +6,7 @@ import re
 class DetectionPatterns:
     # 1. Correos Electrónicos
     EMAIL_REGEX = re.compile(
-        r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",
+        r"(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]{1,64}@(?:[A-Za-z0-9-]{1,63}\.){1,8}[A-Za-z]{2,24}\b",
         re.IGNORECASE
     )
 

@@ -101,13 +101,16 @@ AnonDoc combina tres capas complementarias para garantizar una alta precisión y
 
 ## 🔒 Seguridad y Privacidad por Diseño
 
-- **Aislamiento de Trabajos:** Cada documento se procesa en una carpeta temporal dedicada identificada por un UUIDv4 criptográficamente seguro.
-- **Protección contra Path Traversal:** Verificación estricta de rutas con `commonpath` para impedir manipulación de directorios.
-- **Inspección de Magic Bytes:** Validación real de cabeceras de archivo (`%PDF-` y `PK\x03\x04`). Los archivos maliciosos renombrados son rechazados antes de ser parseados.
-- **Protección contra Zip Bombs:** Inspección del contenedor ZIP de archivos DOCX con límite de tamaño no comprimido y límite de ratio de descompresión.
-- **Eliminación Automática (Auto-purge):** Archivos temporales con TTL de 30 minutos (configurable).
-- **Cero Telemetría y Logs Limpios:** No se imprime texto de los documentos ni valores de PII en la consola ni en logs de auditoría.
-- **Verificación Residual:** Tras redactar un PDF o DOCX, el motor ejecuta una pasada de verificación automática para asegurar que el texto original no pueda ser extraído ni buscado.
+Resumen de controles (detalle, auditoría y riesgos residuales en [SECURITY.md](SECURITY.md)). Ningún control garantiza seguridad absoluta; revise las limitaciones antes de usar documentos reales.
+
+- **Autorización por trabajo:** cada carga devuelve un `job_id` y un `access_token` secreto (se muestra una sola vez). Todos los endpoints del trabajo exigen `Authorization: Bearer <token>`; sin él (o con otro token) la respuesta es 404 indistinguible.
+- **Procesamiento aislado:** el parseo y la redacción corren en un subproceso con entorno mínimo, límites de memoria/CPU/tamaño/tiempo y concurrencia acotada.
+- **Validación estricta:** firma real del archivo (magic bytes) coherente con la extensión; límites de tamaño, páginas, objetos, entradas ZIP y ratio de descompresión; rechazo de PDFs cifrados o con JavaScript/Launch/XFA/adjuntos activos, y de DOCX con macros, OLE, ActiveX o relaciones externas; XML parseado con `defusedxml` (sin XXE).
+- **Fail-closed:** si la verificación posterior no pasa, el resultado **no** se entrega.
+- **Minimización:** al anonimizar se borran el original, las entidades y el mapa de seudónimos; los archivos expiran por TTL y se purgan al iniciar/apagar.
+- **Sanitización de contenido oculto:** metadatos, anotaciones, adjuntos, miniaturas, comentarios, notas, cuadros de texto y autores.
+- **Web:** CSP sin recursos externos, cabeceras de seguridad, CORS cerrado por defecto, docs OpenAPI desactivadas por defecto, límites de tasa y de tamaño de cuerpo, errores genéricos y logs sin PII.
+- **Despliegue:** escucha en `127.0.0.1` por defecto; contenedor no root, `read_only`, `cap_drop: ALL`, `no-new-privileges`, tmpfs para temporales.
 
 ---
 
@@ -115,7 +118,6 @@ AnonDoc combina tres capas complementarias para garantizar una alta precisión y
 
 ### Requisitos del Sistema
 - **Python:** 3.11 o 3.12.
-- **LibreOffice:** (Opcional, utilizado para conversiones de formatos heredados).
 
 ### Instalación Local
 ```bash
@@ -141,13 +143,13 @@ python -m anondoc.main
 ```
 La aplicación estará disponible de inmediato en:
 - **Interfaz Web (Dashboard):** [http://localhost:8000](http://localhost:8000)
-- **Documentación Interactiva (Swagger/OpenAPI):** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Documentación OpenAPI:** desactivada por defecto; actívela solo en desarrollo con `ANONDOC_ENABLE_DOCS=true` (`/docs`).
 
 ---
 
 ## 🐳 Ejecución mediante Docker
 
-AnonDoc cuenta con soporte para Docker y Docker Compose sin requerir configuraciones adicionales:
+AnonDoc incluye `Dockerfile` y `docker-compose.yml` endurecidos (también compatible con `podman-compose`). El puerto se publica solo en `127.0.0.1:8000`; para exponerlo use un reverse proxy con TLS y autenticación.
 
 ```bash
 # Construir e iniciar el contenedor
@@ -164,11 +166,11 @@ docker compose down
 
 ## 📡 Especificación de la API REST
 
-Todos los endpoints se encuentran versionados bajo el prefijo `/api/v1`:
+Todos los endpoints se encuentran versionados bajo el prefijo `/api/v1`. Los endpoints de `{job_id}` requieren `Authorization: Bearer <access_token>`:
 
 | Método | Endpoint | Descripción |
 | :--- | :--- | :--- |
-| `POST` | `/api/v1/documents` | Carga de archivo PDF o DOCX. Retorna `job_id`. |
+| `POST` | `/api/v1/documents` | Carga de archivo PDF o DOCX. Retorna `job_id` y `access_token`. |
 | `POST` | `/api/v1/documents/{job_id}/analyze` | Extrae bloques y ejecuta la detección de PII. |
 | `GET` | `/api/v1/documents/{job_id}/analysis` | Consulta el listado de entidades detectadas y métricas. |
 | `PATCH`| `/api/v1/documents/{job_id}/detections` | Modifica selecciones, descarta falsos positivos o añade entidades. |
@@ -187,22 +189,7 @@ La suite de pruebas incluye tests unitarios para validadores algorítmicos, prue
 PYTHONPATH=. pytest -v
 ```
 
-Todas las pruebas deben ejecutarse y pasar con 0 errores:
-```
-tests/test_anondoc.py::test_ecuador_cedula_valid PASSED
-tests/test_anondoc.py::test_ecuador_cedula_invalid_checksum PASSED
-tests/test_anondoc.py::test_ecuador_cedula_invalid_province PASSED
-tests/test_anondoc.py::test_ecuador_ruc_natural PASSED
-tests/test_anondoc.py::test_luhn_credit_card PASSED
-tests/test_anondoc.py::test_ipv4_validation PASSED
-tests/test_anondoc.py::test_hybrid_pii_detection PASSED
-tests/test_anondoc.py::test_anonymization_strategies PASSED
-tests/test_anondoc.py::test_storage_security_path_traversal PASSED
-tests/test_anondoc.py::test_storage_magic_bytes_check PASSED
-tests/test_anondoc.py::test_pdf_native_redaction_and_verification PASSED
-tests/test_anondoc.py::test_docx_anonymization_and_metadata_scrubbing PASSED
-tests/test_anondoc.py::test_rest_api_e2e_flow PASSED
-```
+Las pruebas de seguridad (`tests/test_security.py`) cubren validación de archivos, ZIP bombs, XXE, macros, IDOR/BOLA, cabeceras, límites de tasa, aislamiento del worker, ReDoS, verificación fail-closed y ausencia de PII residual. Herramientas de análisis: `ruff check anondoc tests`, `bandit -r anondoc`, `pip-audit -r requirements.txt` (`pip install -r requirements-dev.txt`).
 
 ---
 
@@ -211,3 +198,5 @@ tests/test_anondoc.py::test_rest_api_e2e_flow PASSED
 1. **PDFs Escaneados:** Si un PDF consiste exclusivamente en imágenes escaneadas sin una capa de texto OCR preexistente, el sistema alertará que la página contiene una imagen sin texto seleccionable.
 2. **Textos en Curvas Vectoriales:** Textos convertidos a curvas o trazados vectoriales gráficos (por ejemplo en logotipos de cabecera) no son reconocidos como caracteres de texto por los extractores de flujo.
 3. **Imágenes con Texto Incrustado:** AnonDoc anonimiza flujos de texto, metadatos y tablas; no realiza OCR en imágenes fotográficas incrustadas en el cuerpo del documento por defecto para mantener un bajo consumo de memoria.
+4. **Aislamiento parcial:** el worker tiene límites de recursos pero no aislamiento de red ni sandbox de syscalls; ver [SECURITY.md](SECURITY.md).
+5. **Estado en memoria:** los trabajos viven en un solo proceso; no hay escalado horizontal ni persistencia.

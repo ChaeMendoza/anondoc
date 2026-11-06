@@ -1,7 +1,7 @@
 """
 Data Transfer Objects (DTOs) for Application and API Layers.
 """
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional, Dict, Any
 from anondoc.domain.entities import EntityCategory, DetectionConfidence, AnonymizationStrategy, JobStatus, DocumentFormat
 
@@ -24,6 +24,7 @@ class DocumentUploadResponseDTO(BaseModel):
     file_size_bytes: int
     status: JobStatus
     message: str
+    access_token: str
 
 class AnalysisResponseDTO(BaseModel):
     job_id: str
@@ -34,21 +35,24 @@ class AnalysisResponseDTO(BaseModel):
     low_confidence_count: int
     entities: List[PIIEntityDTO]
     categories_found: List[str]
+    limitations: List[str] = Field(default_factory=list)
 
 class EntityUpdateItemDTO(BaseModel):
-    id: Optional[str] = None
+    model_config = ConfigDict(extra="ignore")
+
+    id: Optional[str] = Field(default=None, max_length=64, pattern=r"^[A-Za-z0-9_-]+$")
     category: EntityCategory
-    original_text: str
+    original_text: str = Field(max_length=500)
     selected: bool = True
-    page_or_section: str = "1"
+    page_or_section: str = Field(default="1", max_length=100)
     is_manual: bool = False
 
 class UpdateDetectionsRequestDTO(BaseModel):
-    entities: List[EntityUpdateItemDTO]
+    entities: List[EntityUpdateItemDTO] = Field(max_length=5000)
 
 class AnonymizeRequestDTO(BaseModel):
     strategy: AnonymizationStrategy = AnonymizationStrategy.REDACTION
-    custom_placeholder: Optional[str] = None
+    custom_placeholder: Optional[str] = Field(default=None, max_length=64)
 
 class AnonymizeResponseDTO(BaseModel):
     job_id: str
@@ -62,5 +66,4 @@ class AnonymizeResponseDTO(BaseModel):
 class HealthResponseDTO(BaseModel):
     status: str
     version: str
-    temp_dir: str
     active_jobs: int

@@ -1,145 +1,174 @@
 """
-Application Use Cases Orchestrating Domain and Infrastructure Engines.
+Application use cases orchestrating storage, the isolated worker and PII detection.
+
+Authorization is enforced by the API layer before any use case receives a job.
+Logs contain only operational data (job id, operation, outcome, error code).
 """
+import logging
+import re
+import time
 import uuid
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
-from anondoc.domain.entities import (
-    DocumentJob,
-    PIIEntity,
-    JobStatus,
-    DocumentFormat,
-    AnonymizationStrategy,
-    DetectionConfidence
-)
+from typing import List, Tuple
+
 from anondoc.application.dtos import (
-    DocumentUploadResponseDTO,
     AnalysisResponseDTO,
-    PIIEntityDTO,
-    UpdateDetectionsRequestDTO,
     AnonymizeRequestDTO,
     AnonymizeResponseDTO,
-    HealthResponseDTO
+    DocumentUploadResponseDTO,
+    HealthResponseDTO,
+    PIIEntityDTO,
+    UpdateDetectionsRequestDTO,
 )
-from anondoc.application.job_manager import job_manager
-from anondoc.infrastructure.storage.temp_storage import SecureStorageService
-from anondoc.infrastructure.engines.pdf_engine import PDFEngine
-from anondoc.infrastructure.engines.docx_engine import DOCXEngine
-from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
+from anondoc.application.job_manager import issue_credentials, job_manager
 from anondoc.config import AppConfig
+from anondoc.domain.entities import (
+    DetectionConfidence,
+    DocumentFormat,
+    DocumentJob,
+    JobStatus,
+    PIIEntity,
+)
+from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
+from anondoc.infrastructure.sandbox.runner import WorkerError, run_worker
+from anondoc.infrastructure.security.inspector import DocumentRejected, detect_format
+from anondoc.infrastructure.storage.temp_storage import SecureStorageService
+
+security_log = logging.getLogger("anondoc.security")
+ops_log = logging.getLogger("anondoc.ops")
+
+MEDIA_TYPES = {
+    DocumentFormat.PDF: "application/pdf",
+    DocumentFormat.DOCX: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+}
+
+
+class JobBusy(Exception):
+    """Another operation is already running on the same job."""
+
+
+class JobStateError(Exception):
+    """The job is not in a state that allows the requested operation."""
+
+
+class VerificationFailed(Exception):
+    """Post-anonymization verification failed; no document is delivered."""
+
+
+def display_name(filename: str) -> str:
+    """Display-only name: basename, no control characters, bounded length. Never used as a path."""
+    base = re.split(r"[\\/]", filename or "")[-1]
+    base = re.sub(r"[\x00-\x1f\x7f]", "", base).strip()
+    return (base or "documento")[:100]
+
 
 class DocumentUseCases:
-    """Orchestrates all document privacy workflows."""
-
     def __init__(self, storage: SecureStorageService = None):
         self.storage = storage or SecureStorageService()
-        self.pdf_engine = PDFEngine()
-        self.docx_engine = DOCXEngine()
         self.detector = HybridPIIDetector()
 
+    # ------------------------------------------------------------------ upload
     def upload_document(self, filename: str, content: bytes) -> DocumentUploadResponseDTO:
-        # Check format
-        ext = Path(filename).suffix.lower()
-        if ext == ".pdf":
-            doc_format = DocumentFormat.PDF
-        elif ext == ".docx":
-            doc_format = DocumentFormat.DOCX
-        else:
-            raise ValueError(f"Formato no admitido '{ext}'. Debe ser un archivo .pdf o .docx.")
+        if len(content) == 0:
+            raise DocumentRejected("empty_file", "El archivo está vacío.")
+        if len(content) > AppConfig.MAX_FILE_SIZE_BYTES:
+            raise DocumentRejected("file_too_large", f"El archivo excede el tamaño máximo permitido ({AppConfig.MAX_FILE_SIZE_BYTES // (1024 * 1024)} MB).")
 
-        job_id = str(uuid.uuid4())
-        saved_path = self.storage.save_upload(job_id=job_id, filename=filename, content=content)
+        fmt = detect_format(content[:8])
+        ext = ".pdf" if fmt == "pdf" else ".docx"
+        declared = Path(display_name(filename)).suffix.lower()
+        if declared != ext:
+            raise DocumentRejected("extension_mismatch", "La extensión no coincide con el contenido real del archivo.")
+        doc_format = DocumentFormat.PDF if fmt == "pdf" else DocumentFormat.DOCX
 
-        job = DocumentJob(
-            job_id=job_id,
-            filename=filename,
-            format=doc_format,
-            file_size_bytes=len(content),
-            original_path=saved_path,
-            status=JobStatus.UPLOADED
-        )
-        job_manager.create_job(job)
+        job_id, token, token_hash = issue_credentials()
+        saved_path = self.storage.save_upload(job_id=job_id, extension=ext, content=content)
+        started = time.monotonic()
+        try:
+            info = run_worker(
+                {"op": "inspect", "fmt": fmt, "path": saved_path, "size": len(content)},
+                cwd=str(self.storage.get_job_dir(job_id)),
+            )
+            job = DocumentJob(
+                job_id=job_id,
+                filename=display_name(filename),
+                format=doc_format,
+                file_size_bytes=len(content),
+                original_path=saved_path,
+                status=JobStatus.UPLOADED,
+                access_token_hash=token_hash,
+                limitations=info.get("limitations", []),
+            )
+            job_manager.create_job(job)
+        except (WorkerError, DocumentRejected) as exc:
+            self.storage.cleanup_job(job_id)
+            security_log.warning("event=upload_rejected job=%s code=%s", job_id, exc.code)
+            raise
+        except Exception:
+            self.storage.cleanup_job(job_id)
+            raise
+        ops_log.info("op=upload job=%s result=ok duration_ms=%d", job_id, (time.monotonic() - started) * 1000)
 
         return DocumentUploadResponseDTO(
             job_id=job_id,
-            filename=filename,
+            filename=job.filename,
             format=doc_format,
             file_size_bytes=len(content),
             status=JobStatus.UPLOADED,
-            message="Documento cargado e inspeccionado de manera segura."
+            message="Documento cargado e inspeccionado.",
+            access_token=token,
         )
 
-    def analyze_document(self, job_id: str) -> AnalysisResponseDTO:
-        job = job_manager.get_job(job_id)
-        if not job:
-            raise KeyError(f"Trabajo '{job_id}' no encontrado o expirado.")
+    # ------------------------------------------------------------------ analysis
+    def analyze_document(self, job: DocumentJob) -> AnalysisResponseDTO:
+        if job.status not in (JobStatus.UPLOADED, JobStatus.ANALYZED):
+            raise JobStateError("El trabajo no admite análisis en su estado actual.")
+        if not job_manager.begin_operation(job):
+            raise JobBusy()
+        started = time.monotonic()
+        try:
+            job.status = JobStatus.ANALYZING
+            try:
+                resp = run_worker(
+                    {"op": "extract", "fmt": job.format.value, "path": job.original_path, "size": job.file_size_bytes},
+                    cwd=str(self.storage.get_job_dir(job.job_id)),
+                )
+            except WorkerError as exc:
+                job.status = JobStatus.UPLOADED
+                security_log.warning("event=analysis_failed job=%s code=%s", job.job_id, exc.code)
+                raise
+            entities = self.detector.detect_entities(resp["blocks"])
+            job.entities = entities[: AppConfig.MAX_ENTITIES_PER_JOB]
+            job.limitations = resp.get("limitations", job.limitations)
+            job.status = JobStatus.ANALYZED
+            job_manager.update_job(job)
+            ops_log.info("op=analyze job=%s result=ok entities=%d duration_ms=%d",
+                         job.job_id, len(job.entities), (time.monotonic() - started) * 1000)
+            return self.analysis_summary(job)
+        finally:
+            if job.status == JobStatus.ANALYZING:
+                job.status = JobStatus.UPLOADED
+            job_manager.end_operation(job)
 
-        job.status = JobStatus.ANALYZING
-        job_manager.update_job(job)
-
-        # 1. Extract text blocks based on format
-        if job.format == DocumentFormat.PDF:
-            blocks = self.pdf_engine.extract_text_and_blocks(job.original_path)
-        else:
-            blocks = self.docx_engine.extract_text_and_blocks(job.original_path)
-
-        # 2. Run detection engine
-        detected_entities = self.detector.detect_entities(blocks)
-        job.entities = detected_entities
-        job.status = JobStatus.ANALYZED
-        job_manager.update_job(job)
-
-        # 3. Build response DTO
-        high_c = sum(1 for e in detected_entities if e.confidence == DetectionConfidence.HIGH)
-        med_c = sum(1 for e in detected_entities if e.confidence == DetectionConfidence.MEDIUM)
-        low_c = sum(1 for e in detected_entities if e.confidence == DetectionConfidence.LOW)
-        categories = sorted(list({e.category.value for e in detected_entities}))
-
-        entity_dtos = [
-            PIIEntityDTO(
-                id=e.id,
-                category=e.category,
-                original_text=e.original_text,
-                confidence=e.confidence,
-                context=e.context,
-                page_or_section=e.page_or_section,
-                selected=e.selected,
-                is_manual=e.is_manual,
-                validation_details=e.validation_details
-            )
-            for e in detected_entities
-        ]
-
-        return AnalysisResponseDTO(
-            job_id=job.job_id,
-            status=job.status,
-            total_entities=len(detected_entities),
-            high_confidence_count=high_c,
-            medium_confidence_count=med_c,
-            low_confidence_count=low_c,
-            entities=entity_dtos,
-            categories_found=categories
-        )
-
-    def update_detections(self, job_id: str, request: UpdateDetectionsRequestDTO) -> AnalysisResponseDTO:
-        job = job_manager.get_job(job_id)
-        if not job:
-            raise KeyError(f"Trabajo '{job_id}' no encontrado o expirado.")
-
-        # Map existing entities
-        existing_map = {e.id: e for e in job.entities}
-        updated_entities: List[PIIEntity] = []
+    def update_detections(self, job: DocumentJob, request: UpdateDetectionsRequestDTO) -> AnalysisResponseDTO:
+        if job.status != JobStatus.ANALYZED:
+            raise JobStateError("El trabajo no admite cambios en su estado actual.")
+        existing = {e.id: e for e in job.entities}
+        updated: List[PIIEntity] = []
+        used_ids = set()
 
         for item in request.entities:
-            if item.id and item.id in existing_map:
-                ent = existing_map[item.id]
+            if item.id and item.id in existing and item.id not in used_ids:
+                ent = existing[item.id]
                 ent.selected = item.selected
                 ent.category = item.category
-                updated_entities.append(ent)
-            else:
-                # Add manual entity
-                new_ent = PIIEntity(
-                    id=item.id or str(uuid.uuid4()),
+                updated.append(ent)
+                used_ids.add(ent.id)
+            elif item.original_text.strip():
+                new_id = item.id if item.id and item.id not in existing and item.id not in used_ids else str(uuid.uuid4())
+                used_ids.add(new_id)
+                updated.append(PIIEntity(
+                    id=new_id,
                     category=item.category,
                     original_text=item.original_text,
                     start_char=0,
@@ -149,123 +178,128 @@ class DocumentUseCases:
                     page_or_section=item.page_or_section,
                     selected=item.selected,
                     is_manual=True,
-                    validation_details="Validación manual de usuario"
+                    validation_details="Validación manual de usuario",
+                ))
+
+        job.entities = updated[: AppConfig.MAX_ENTITIES_PER_JOB]
+        job_manager.update_job(job)
+        return self.analysis_summary(job)
+
+    # ------------------------------------------------------------------ anonymization
+    def anonymize_document(self, job: DocumentJob, request: AnonymizeRequestDTO) -> AnonymizeResponseDTO:
+        if job.status != JobStatus.ANALYZED:
+            raise JobStateError("El documento debe analizarse antes de anonimizarse.")
+        if not job_manager.begin_operation(job):
+            raise JobBusy()
+        started = time.monotonic()
+        out_path = self.storage.output_path(job.job_id, ".pdf" if job.format == DocumentFormat.PDF else ".docx")
+        try:
+            job.status = JobStatus.ANONYMIZING
+            try:
+                resp = run_worker(
+                    {
+                        "op": "anonymize",
+                        "fmt": job.format.value,
+                        "path": job.original_path,
+                        "size": job.file_size_bytes,
+                        "output": out_path,
+                        "strategy": request.strategy.value,
+                        "placeholder": request.custom_placeholder,
+                        "entities": [
+                            {"id": e.id, "category": e.category.value, "original_text": e.original_text, "selected": e.selected}
+                            for e in job.entities
+                        ],
+                    },
+                    cwd=str(self.storage.get_job_dir(job.job_id)),
                 )
-                updated_entities.append(new_ent)
+            except WorkerError as exc:
+                self.storage.remove_file(out_path)
+                job.status = JobStatus.ANALYZED
+                security_log.warning("event=anonymize_failed job=%s code=%s", job.job_id, exc.code)
+                raise
 
-        job.entities = updated_entities
-        job_manager.update_job(job)
+            if not resp.get("verification_passed"):
+                self.storage.remove_file(out_path)
+                job.status = JobStatus.ANALYZED
+                security_log.warning("event=verification_failed job=%s", job.job_id)
+                raise VerificationFailed("; ".join(resp.get("warnings", [])))
 
-        return self.analyze_document_summary(job)
+            selected_count = sum(1 for e in job.entities if e.selected)
+            job.anonymized_path = out_path
+            job.status = JobStatus.COMPLETED
+            job.strategy = request.strategy
+            job.warnings = resp.get("warnings", [])
+            job.stats = {
+                "total_selected": selected_count,
+                "verification_passed": True,
+                "strategy": request.strategy.value,
+            }
+            # Data minimization: the original and the detected values are not kept after success.
+            self.storage.remove_file(job.original_path)
+            job.original_path = ""
+            job.entities = []
+            job.pseudonym_map.clear()
+            job_manager.update_job(job)
+            ops_log.info("op=anonymize job=%s result=ok duration_ms=%d", job.job_id, (time.monotonic() - started) * 1000)
 
-    def anonymize_document(self, job_id: str, request: AnonymizeRequestDTO) -> AnonymizeResponseDTO:
-        job = job_manager.get_job(job_id)
-        if not job:
-            raise KeyError(f"Trabajo '{job_id}' no encontrado o expirado.")
-
-        job.status = JobStatus.ANONYMIZING
-        job.strategy = request.strategy
-        job.custom_placeholder = request.custom_placeholder
-        job_manager.update_job(job)
-
-        job_dir = self.storage.get_job_dir(job.job_id)
-        out_ext = ".pdf" if job.format == DocumentFormat.PDF else ".docx"
-        out_filename = f"anonymized_{Path(job.filename).stem}{out_ext}"
-        out_path = str(job_dir / out_filename)
-
-        # Execute anonymization
-        if job.format == DocumentFormat.PDF:
-            success, warnings = self.pdf_engine.anonymize(
-                input_path=job.original_path,
-                output_path=out_path,
-                entities=job.entities,
-                strategy=request.strategy,
-                pseudonym_map=job.pseudonym_map,
-                custom_placeholder=request.custom_placeholder
+            return AnonymizeResponseDTO(
+                job_id=job.job_id,
+                status=job.status,
+                strategy_used=request.strategy,
+                total_anonymized=selected_count,
+                download_url=f"/api/v1/documents/{job.job_id}/download",
+                warnings=job.warnings,
+                stats=job.stats,
             )
-        else:
-            success, warnings = self.docx_engine.anonymize(
-                input_path=job.original_path,
-                output_path=out_path,
-                entities=job.entities,
-                strategy=request.strategy,
-                pseudonym_map=job.pseudonym_map,
-                custom_placeholder=request.custom_placeholder
-            )
+        finally:
+            if job.status == JobStatus.ANONYMIZING:
+                self.storage.remove_file(out_path)
+                job.status = JobStatus.ANALYZED
+            job_manager.end_operation(job)
 
-        job.anonymized_path = out_path
-        job.status = JobStatus.COMPLETED
-        job.warnings = warnings
-        
-        selected_count = sum(1 for e in job.entities if e.selected)
-        job.stats = {
-            "total_selected": selected_count,
-            "verification_passed": success,
-            "strategy": request.strategy.value
-        }
-        job_manager.update_job(job)
+    def get_download_path(self, job: DocumentJob) -> Tuple[str, str, str]:
+        """Returns (file_path, download_name, media_type)."""
+        if job.status != JobStatus.COMPLETED or not job.anonymized_path or not Path(job.anonymized_path).exists():
+            raise FileNotFoundError("Documento anonimizado no disponible.")
+        ext = Path(job.anonymized_path).suffix
+        return job.anonymized_path, f"anonymized_{job.job_id[:8]}{ext}", MEDIA_TYPES[job.format]
 
-        return AnonymizeResponseDTO(
-            job_id=job.job_id,
-            status=job.status,
-            strategy_used=request.strategy,
-            total_anonymized=selected_count,
-            download_url=f"/api/v1/documents/{job.job_id}/download",
-            warnings=warnings,
-            stats=job.stats
-        )
+    def delete_job(self, job: DocumentJob) -> bool:
+        self.storage.cleanup_job(job.job_id)
+        return job_manager.delete_job(job.job_id)
 
-    def get_download_path(self, job_id: str) -> Tuple[str, str, str]:
-        """Returns (file_path, filename, media_type)."""
-        job = job_manager.get_job(job_id)
-        if not job or not job.anonymized_path or not Path(job.anonymized_path).exists():
-            raise FileNotFoundError(f"Documento anonimizado para trabajo '{job_id}' no disponible.")
-
-        media_type = "application/pdf" if job.format == DocumentFormat.PDF else "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        return job.anonymized_path, Path(job.anonymized_path).name, media_type
-
-    def delete_job(self, job_id: str) -> bool:
-        self.storage.cleanup_job(job_id)
-        return job_manager.delete_job(job_id)
-
-    def analyze_document_summary(self, job: DocumentJob) -> AnalysisResponseDTO:
-        high_c = sum(1 for e in job.entities if e.confidence == DetectionConfidence.HIGH)
-        med_c = sum(1 for e in job.entities if e.confidence == DetectionConfidence.MEDIUM)
-        low_c = sum(1 for e in job.entities if e.confidence == DetectionConfidence.LOW)
-        categories = sorted(list({e.category.value for e in job.entities}))
-
-        entity_dtos = [
-            PIIEntityDTO(
-                id=e.id,
-                category=e.category,
-                original_text=e.original_text,
-                confidence=e.confidence,
-                context=e.context,
-                page_or_section=e.page_or_section,
-                selected=e.selected,
-                is_manual=e.is_manual,
-                validation_details=e.validation_details
-            )
-            for e in job.entities
-        ]
-
+    # ------------------------------------------------------------------ helpers
+    def analysis_summary(self, job: DocumentJob) -> AnalysisResponseDTO:
+        counts = {c: sum(1 for e in job.entities if e.confidence == c) for c in DetectionConfidence}
         return AnalysisResponseDTO(
             job_id=job.job_id,
             status=job.status,
             total_entities=len(job.entities),
-            high_confidence_count=high_c,
-            medium_confidence_count=med_c,
-            low_confidence_count=low_c,
-            entities=entity_dtos,
-            categories_found=categories
+            high_confidence_count=counts[DetectionConfidence.HIGH],
+            medium_confidence_count=counts[DetectionConfidence.MEDIUM],
+            low_confidence_count=counts[DetectionConfidence.LOW],
+            entities=[
+                PIIEntityDTO(
+                    id=e.id,
+                    category=e.category,
+                    original_text=e.original_text,
+                    confidence=e.confidence,
+                    context=e.context,
+                    page_or_section=e.page_or_section,
+                    selected=e.selected,
+                    is_manual=e.is_manual,
+                    validation_details=e.validation_details,
+                )
+                for e in job.entities
+            ],
+            categories_found=sorted({e.category.value for e in job.entities}),
+            limitations=job.limitations,
         )
 
+    def purge_expired(self) -> int:
+        for job_id in job_manager.pop_expired():
+            self.storage.cleanup_job(job_id)
+        return self.storage.purge_expired_jobs()
+
     def health_check(self) -> HealthResponseDTO:
-        purged = self.storage.purge_expired_jobs()
-        active = len(job_manager.list_jobs())
-        return HealthResponseDTO(
-            status="healthy",
-            version=AppConfig.VERSION,
-            temp_dir=str(self.storage.base_dir),
-            active_jobs=active
-        )
+        return HealthResponseDTO(status="healthy", version=AppConfig.VERSION, active_jobs=job_manager.count_active())

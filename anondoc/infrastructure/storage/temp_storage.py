@@ -1,99 +1,60 @@
 """
-Secure Temporary Storage Service with Path Traversal, Magic Byte & Zip Bomb Protections.
+Secure temporary storage: random job identifiers, per-job private directories,
+fixed server-side file names (user-supplied names are never used as paths).
 """
 import os
+import re
 import shutil
 import time
-import zipfile
 from pathlib import Path
-from typing import Tuple
+
 from anondoc.config import AppConfig
 
+JOB_ID_RE = re.compile(r"^[A-Za-z0-9_-]{22}$")
+
+
 class SecureStorageService:
-    """Manages ephemeral files securely with strict isolation and validation."""
+    """Manages ephemeral files with strict per-job isolation."""
 
     def __init__(self, base_dir: Path = None):
         self.base_dir = (base_dir or AppConfig.BASE_TEMP_DIR).resolve()
-        self.base_dir.mkdir(parents=True, exist_ok=True)
+        self.base_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
 
     def get_job_dir(self, job_id: str) -> Path:
-        """Returns safe isolated directory for a job, verifying against path traversal."""
+        """Returns the job directory; rejects any identifier that is not one we generated."""
+        if not isinstance(job_id, str) or not JOB_ID_RE.fullmatch(job_id):
+            raise ValueError("Identificador de trabajo inválido.")
         job_dir = (self.base_dir / job_id).resolve()
-        if not str(job_dir).startswith(str(self.base_dir)):
-            raise ValueError("Acceso no autorizado: intento de Path Traversal detectado.")
+        if job_dir.parent != self.base_dir:
+            raise ValueError("Identificador de trabajo inválido.")
         return job_dir
 
-    def validate_file_security(self, content: bytes, filename: str) -> Tuple[bool, str]:
-        """
-        Validates:
-        1. File size limit.
-        2. Extension whitelist.
-        3. Magic bytes sniffing.
-        4. Zip bomb inspection for DOCX.
-        """
-        # 1. Size check
-        if len(content) > AppConfig.MAX_FILE_SIZE_BYTES:
-            return False, f"El archivo excede el tamaño máximo permitido ({AppConfig.MAX_FILE_SIZE_BYTES // (1024*1024)} MB)."
-
-        # 2. Extension check
-        ext = Path(filename).suffix.lower()
-        if ext not in AppConfig.ALLOWED_EXTENSIONS:
-            return False, f"Extensión '{ext}' no soportada. Formatos válidos: PDF, DOCX."
-
-        # 3. Magic bytes check
-        if ext == ".pdf":
-            if not content.startswith(b"%PDF-"):
-                return False, "Firma de archivo PDF inválida (magic bytes corruptos o no auténticos)."
-        elif ext == ".docx":
-            if not content.startswith(b"PK\x03\x04"):
-                return False, "Firma de archivo DOCX inválida (el archivo debe ser un contenedor ZIP OOXML legítimo)."
-
-            # 4. Zip Bomb & XML integrity check for DOCX
-            try:
-                import io
-                with zipfile.ZipFile(io.BytesIO(content)) as zf:
-                    total_uncompressed = 0
-                    total_compressed = len(content)
-                    
-                    # Must contain word/document.xml
-                    has_document_xml = False
-                    for info in zf.infolist():
-                        # Prevent zip slip
-                        if ".." in info.filename or info.filename.startswith("/"):
-                            return False, "Riesgo de seguridad: archivo ZIP contiene rutas maliciosas (Zip Slip)."
-                        total_uncompressed += info.file_size
-                        if info.filename == "word/document.xml":
-                            has_document_xml = True
-
-                    if not has_document_xml:
-                        return False, "Estructura de documento Word inválida (falta word/document.xml)."
-
-                    if total_compressed > 0 and total_uncompressed > 5 * 1024 * 1024:
-                        ratio = total_uncompressed / total_compressed
-                        if ratio > AppConfig.MAX_DECOMPRESSED_RATIO:
-                            return False, f"Riesgo de seguridad: archivo comprimido excede ratio de descompresión seguro ({ratio:.1f}x)."
-
-                    if total_uncompressed > AppConfig.MAX_DOCX_UNCOMPRESSED_BYTES:
-                        return False, "Riesgo de seguridad: archivo descomprimido excede límite de memoria permitido."
-
-            except zipfile.BadZipFile:
-                return False, "El archivo DOCX está dañado o no es un ZIP válido."
-
-        return True, "Archivo válido y seguro."
-
-    def save_upload(self, job_id: str, filename: str, content: bytes) -> str:
-        """Saves file inside isolated job directory."""
-        valid, msg = self.validate_file_security(content, filename)
-        if not valid:
-            raise ValueError(msg)
-
+    def create_job_dir(self, job_id: str) -> Path:
         job_dir = self.get_job_dir(job_id)
-        job_dir.mkdir(parents=True, exist_ok=True)
+        job_dir.mkdir(mode=0o700, exist_ok=False)
+        return job_dir
 
-        safe_filename = Path(filename).name  # Strips any directory components
-        dest_path = job_dir / f"original_{safe_filename}"
-        dest_path.write_bytes(content)
-        return str(dest_path)
+    def save_upload(self, job_id: str, extension: str, content: bytes) -> str:
+        """Writes the original upload as <job_dir>/original<ext>; ext must be .pdf or .docx."""
+        if extension not in AppConfig.ALLOWED_EXTENSIONS:
+            raise ValueError("Formato no admitido.")
+        job_dir = self.create_job_dir(job_id)
+        dest = job_dir / f"original{extension}"
+        fd = os.open(dest, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "wb") as fh:
+            fh.write(content)
+        return str(dest)
+
+    def output_path(self, job_id: str, extension: str) -> str:
+        if extension not in AppConfig.ALLOWED_EXTENSIONS:
+            raise ValueError("Formato no admitido.")
+        return str(self.get_job_dir(job_id) / f"anonymized{extension}")
+
+    def remove_file(self, path: str) -> None:
+        try:
+            Path(path).unlink(missing_ok=True)
+        except OSError:
+            pass
 
     def cleanup_job(self, job_id: str) -> bool:
         """Removes the entire job folder."""
@@ -104,17 +65,16 @@ class SecureStorageService:
         return False
 
     def purge_expired_jobs(self, max_age_seconds: int = None) -> int:
-        """Purges any directory older than TTL."""
-        ttl = max_age_seconds or AppConfig.JOB_TTL_SECONDS
+        """Purges job directories older than the TTL (0 purges everything)."""
+        ttl = AppConfig.JOB_TTL_SECONDS if max_age_seconds is None else max_age_seconds
         now = time.time()
         purged = 0
         if not self.base_dir.exists():
             return 0
 
         for item in self.base_dir.iterdir():
-            if item.is_dir():
-                mtime = item.stat().st_mtime
-                if (now - mtime) > ttl:
+            if item.is_dir() and not item.is_symlink():
+                if (now - item.stat().st_mtime) >= ttl:
                     shutil.rmtree(item, ignore_errors=True)
                     purged += 1
         return purged

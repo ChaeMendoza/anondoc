@@ -1,99 +1,92 @@
 """
-FastAPI REST Routes for AnonDoc v2.0.
-Strict versioning, Pydantic DTOs, and error handling.
+FastAPI REST routes for AnonDoc.
+
+Every job endpoint requires `Authorization: Bearer <access_token>` (the token returned
+at upload). Unknown, expired and unauthorized jobs all produce the same 404.
 """
-from fastapi import APIRouter, UploadFile, File, HTTPException, status
-from fastapi.responses import FileResponse
-from typing import Dict, Any
+from typing import Optional
+
+from fastapi import APIRouter, Depends, File, Header, HTTPException, UploadFile, status
+from fastapi.concurrency import run_in_threadpool
+from fastapi.responses import FileResponse, Response
 
 from anondoc.application.dtos import (
-    DocumentUploadResponseDTO,
     AnalysisResponseDTO,
-    UpdateDetectionsRequestDTO,
     AnonymizeRequestDTO,
     AnonymizeResponseDTO,
-    HealthResponseDTO
+    DocumentUploadResponseDTO,
+    HealthResponseDTO,
+    UpdateDetectionsRequestDTO,
 )
+from anondoc.application.job_manager import job_manager
 from anondoc.application.use_cases import DocumentUseCases
+from anondoc.config import AppConfig
+from anondoc.domain.entities import DocumentJob
+from anondoc.infrastructure.security.inspector import DocumentRejected
+from anondoc.infrastructure.storage.temp_storage import JOB_ID_RE
 
 router = APIRouter(prefix="/api/v1", tags=["Documents"])
 use_cases = DocumentUseCases()
 
+NOT_FOUND = HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trabajo no encontrado o no autorizado.")
+
+
+def authorized_job(job_id: str, authorization: Optional[str] = Header(default=None)) -> DocumentJob:
+    token = None
+    if authorization and authorization.lower().startswith("bearer "):
+        token = authorization[7:].strip()
+    if not JOB_ID_RE.fullmatch(job_id):
+        raise NOT_FOUND
+    job = job_manager.get_authorized_job(job_id, token)
+    if job is None:
+        raise NOT_FOUND
+    return job
+
+
 @router.post("/documents", response_model=DocumentUploadResponseDTO, status_code=status.HTTP_201_CREATED)
 async def upload_document(file: UploadFile = File(...)):
-    """Carga de documento PDF o DOCX con validación de seguridad de bajo nivel."""
-    try:
-        content = await file.read()
-        res = use_cases.upload_document(filename=file.filename, content=content)
-        return res
-    except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error al procesar archivo: {str(e)}")
+    """Carga de un único documento PDF o DOCX; el formato real se determina por su contenido."""
+    content = await file.read(AppConfig.MAX_FILE_SIZE_BYTES + 1)
+    if len(content) > AppConfig.MAX_FILE_SIZE_BYTES:
+        raise DocumentRejected("file_too_large", f"El archivo excede el tamaño máximo permitido ({AppConfig.MAX_FILE_SIZE_BYTES // (1024 * 1024)} MB).")
+    return await run_in_threadpool(use_cases.upload_document, file.filename or "", content)
+
 
 @router.post("/documents/{job_id}/analyze", response_model=AnalysisResponseDTO)
-async def analyze_document(job_id: str):
-    """Ejecuta el análisis y detección de información personal y sensible."""
-    try:
-        return use_cases.analyze_document(job_id)
-    except KeyError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error durante el análisis: {str(e)}")
+def analyze_document(job: DocumentJob = Depends(authorized_job)):
+    return use_cases.analyze_document(job)
+
 
 @router.get("/documents/{job_id}/analysis", response_model=AnalysisResponseDTO)
-async def get_analysis(job_id: str):
-    """Consulta las detecciones actuales del documento."""
-    from anondoc.application.job_manager import job_manager
-    job = job_manager.get_job(job_id)
-    if not job:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Trabajo '{job_id}' no encontrado.")
-    return use_cases.analyze_document_summary(job)
+def get_analysis(job: DocumentJob = Depends(authorized_job)):
+    return use_cases.analysis_summary(job)
+
 
 @router.patch("/documents/{job_id}/detections", response_model=AnalysisResponseDTO)
-async def update_detections(job_id: str, request: UpdateDetectionsRequestDTO):
-    """Permite al usuario revisar, corregir falsos positivos y añadir entidades manuales."""
-    try:
-        return use_cases.update_detections(job_id, request)
-    except KeyError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+def update_detections(request: UpdateDetectionsRequestDTO, job: DocumentJob = Depends(authorized_job)):
+    return use_cases.update_detections(job, request)
+
 
 @router.post("/documents/{job_id}/anonymize", response_model=AnonymizeResponseDTO)
-async def anonymize_document(job_id: str, request: AnonymizeRequestDTO):
-    """Aplica la estrategia de anonimización seleccionada sobre el documento."""
-    try:
-        return use_cases.anonymize_document(job_id, request)
-    except KeyError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error al anonimizar: {str(e)}")
+def anonymize_document(request: AnonymizeRequestDTO, job: DocumentJob = Depends(authorized_job)):
+    return use_cases.anonymize_document(job, request)
+
 
 @router.get("/documents/{job_id}/download")
-async def download_document(job_id: str):
-    """Descarga el documento resultante anonimizado."""
+def download_document(job: DocumentJob = Depends(authorized_job)):
     try:
-        path, filename, media_type = use_cases.get_download_path(job_id)
-        return FileResponse(
-            path=path,
-            filename=filename,
-            media_type=media_type
-        )
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+        path, filename, media_type = use_cases.get_download_path(job)
+    except FileNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Documento anonimizado no disponible.")
+    return FileResponse(path=path, filename=filename, media_type=media_type)
+
 
 @router.delete("/documents/{job_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_job(job_id: str):
-    """Elimina de forma permanente el trabajo y los archivos temporales asociados."""
-    success = use_cases.delete_job(job_id)
-    if not success:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trabajo no encontrado.")
-    return None
+def delete_job(job: DocumentJob = Depends(authorized_job)):
+    use_cases.delete_job(job)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
 @router.get("/health", response_model=HealthResponseDTO)
-async def health():
-    """Estado y métricas de salud del servicio."""
+def health():
     return use_cases.health_check()

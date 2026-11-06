@@ -1,24 +1,26 @@
-version: '3.8'
-
 services:
   anondoc:
     build: .
     container_name: anondoc-app
     ports:
-      - "8000:8000"
+      # Solo loopback del host. Para exponerlo use un reverse proxy con TLS y autenticación.
+      - "127.0.0.1:8000:8000"
     environment:
-      - ANONDOC_HOST=0.0.0.0
+      - ANONDOC_HOST=0.0.0.0 # dentro del contenedor; el acceso externo lo limita el mapeo de puertos
       - ANONDOC_PORT=8000
       - ANONDOC_DEBUG=false
       - ANONDOC_JOB_TTL=1800
       - ANONDOC_MAX_FILE_SIZE=26214400 # 25 MB
       - ANONDOC_TEMP_DIR=/tmp/anondoc
-    volumes:
-      # Volumen aislado para archivos temporales (opcional para inspección)
-      - anondoc_tmp:/tmp/anondoc
-    restart: unless-stopped
+    # Los documentos solo viven en memoria RAM (tmpfs) y desaparecen al detener el contenedor.
+    tmpfs:
+      - /tmp/anondoc:rw,noexec,nosuid,nodev,size=256m,mode=1777
+    read_only: true
+    cap_drop:
+      - ALL
     security_opt:
       - no-new-privileges:true
-
-volumes:
-  anondoc_tmp:
+    pids_limit: 128
+    mem_limit: 1g
+    cpus: 2.0
+    restart: unless-stopped

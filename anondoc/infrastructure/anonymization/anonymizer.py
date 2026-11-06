@@ -1,7 +1,7 @@
 """
 Anonymization Strategies Engine: Redaction, Pseudonymization, and Masking.
 """
-from typing import Dict, List, Tuple
+from typing import Dict
 from anondoc.domain.entities import PIIEntity, EntityCategory, AnonymizationStrategy
 from anondoc.config import AppConfig
 

@@ -3,7 +3,7 @@ Domain Interfaces for Document Processing and Anonymization Engines.
 """
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any, Tuple
-from anondoc.domain.entities import PIIEntity, DocumentJob, AnonymizationStrategy
+from anondoc.domain.entities import PIIEntity, AnonymizationStrategy
 
 class IDocumentExtractor(ABC):
     @abstractmethod

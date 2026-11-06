@@ -81,3 +81,6 @@ class DocumentJob:
     stats: Dict[str, Any] = field(default_factory=dict)
     warnings: List[str] = field(default_factory=list)
     pseudonym_map: Dict[str, str] = field(default_factory=dict)
+    access_token_hash: str = ""
+    limitations: List[str] = field(default_factory=list)
+    busy: bool = False

@@ -1,7 +1,7 @@
 """
 Hybrid PII Detector combining Regex, Context Windows, and Algorithmic Validation.
 """
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any
 from anondoc.domain.entities import PIIEntity, EntityCategory, DetectionConfidence
 from anondoc.domain.interfaces import IPIIDetector
 from anondoc.domain.validators import PIIValidators
