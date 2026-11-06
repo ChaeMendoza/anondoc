@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  anondoc:
+    build: .
+    container_name: anondoc-app
+    ports:
+      - "8000:8000"
+    environment:
+      - ANONDOC_HOST=0.0.0.0
+      - ANONDOC_PORT=8000
+      - ANONDOC_DEBUG=false
+      - ANONDOC_JOB_TTL=1800
+      - ANONDOC_MAX_FILE_SIZE=26214400 # 25 MB
+      - ANONDOC_TEMP_DIR=/tmp/anondoc
+    volumes:
+      # Volumen aislado para archivos temporales (opcional para inspección)
+      - anondoc_tmp:/tmp/anondoc
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  anondoc_tmp:

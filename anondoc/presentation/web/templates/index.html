@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnonDoc - Privacidad y Anonimización Documental</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header / Navbar -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+        <span class="brand-name">AnonDoc</span>
+        <span class="brand-badge">v2.0 Core</span>
+      </div>
+      <div class="header-actions">
+        <span class="privacy-badge">
+          <span class="pulse-dot"></span>
+          Procesamiento 100% Local y Epímero
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- FASE 1: Dashboard & Carga -->
+    <section id="uploadSection" class="view-panel active">
+      <div class="hero-text">
+        <h1>Detección y Anonimización Segura de Datos Personales</h1>
+        <p>Procesa documentos PDF y DOCX eliminando información sensible mediante redacción nativa irreversible, seudonimización o enmascaramiento con control humano previo.</p>
+      </div>
+
+      <div class="upload-card">
+        <div id="dropZone" class="drop-zone">
+          <input type="file" id="fileInput" accept=".pdf,.docx" style="display: none;">
+          <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <div class="drop-text">
+            <strong>Haz clic para cargar</strong> o arrastra y suelta tu archivo aquí
+          </div>
+          <div class="drop-subtext">Formatos admitidos: <strong>PDF</strong> y <strong>DOCX</strong> (hasta 25 MB)</div>
+        </div>
+
+        <div id="uploadProgress" class="progress-container" style="display: none;">
+          <div class="progress-bar-bg">
+            <div id="progressBar" class="progress-bar-fill"></div>
+          </div>
+          <div id="progressText" class="progress-text">Analizando estructura y entidades...</div>
+        </div>
+      </div>
+
+      <!-- Features Cards -->
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Redacción Física Real</h3>
+          <p>En PDF, los objetos de texto se eliminan de la corriente binaria; en DOCX se sanean metadatos y revisiones.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔍</div>
+          <h3>Detección Híbrida PII</h3>
+          <p>Algoritmos para Cédulas, RUCs, tarjetas (Luhn), correos, teléfonos, nombres con contexto y datos médicos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚖️</div>
+          <h3>Human-in-the-Loop</h3>
+          <p>Revisa, corrige falsos positivos y añade detecciones manuales antes de compilar el documento definitivo.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FASE 2: Revisión Humana de Detecciones -->
+    <section id="reviewSection" class="view-panel">
+      <div class="review-header">
+        <div>
+          <button id="btnBackToUpload" class="btn btn-secondary btn-sm">← Cargar otro</button>
+          <h2 id="docTitle" class="doc-title">Documento en Revisión</h2>
+          <div class="doc-meta" id="docMeta">Analizando...</div>
+        </div>
+        <div class="summary-chips">
+          <div class="chip chip-total">Total: <strong id="chipTotal">0</strong></div>
+          <div class="chip chip-high">Alta: <strong id="chipHigh">0</strong></div>
+          <div class="chip chip-med">Media: <strong id="chipMed">0</strong></div>
+          <div class="chip chip-low">Baja: <strong id="chipLow">0</strong></div>
+        </div>
+      </div>
+
+      <div class="review-layout">
+        <!-- Columna Izquierda: Tabla interactiva -->
+        <div class="table-container">
+          <div class="table-toolbar">
+            <div class="selection-controls">
+              <button id="btnSelectAll" class="btn btn-xs btn-outline">Seleccionar todos</button>
+              <button id="btnDeselectAll" class="btn btn-xs btn-outline">Deseleccionar todos</button>
+            </div>
+            <div class="filter-controls">
+              <select id="categoryFilter" class="select-input">
+                <option value="ALL">Todas las categorías</option>
+              </select>
+              <select id="confidenceFilter" class="select-input">
+                <option value="ALL">Todas las confianzas</option>
+                <option value="HIGH">Alta confianza</option>
+                <option value="MEDIUM">Media confianza</option>
+                <option value="LOW">Baja confianza</option>
+              </select>
+            </div>
+          </div>
+
+          <table class="entities-table">
+            <thead>
+              <tr>
+                <th width="40"><input type="checkbox" id="masterCheckbox" checked></th>
+                <th width="140">Categoría</th>
+                <th>Texto Detectado</th>
+                <th width="110">Ubicación</th>
+                <th width="95">Confianza</th>
+                <th width="60">Acción</th>
+              </tr>
+            </thead>
+            <tbody id="entitiesTableBody">
+              <!-- Renderizado dinámico con JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Columna Derecha: Configuración de Estrategia y Entidad Manual -->
+        <aside class="sidebar-controls">
+          <!-- Tarjeta de Estrategia -->
+          <div class="control-card">
+            <h3>Estrategia de Anonimización</h3>
+            
+            <label class="strategy-option">
+              <input type="radio" name="strategy" value="REDACTION" checked>
+              <div>
+                <strong>Redacción (Recomendada)</strong>
+                <p>Sustituye por etiquetas fijas como <code>[CEDULA_ANONIMIZADO]</code>.</p>
+              </div>
+            </label>
+
+            <label class="strategy-option">
+              <input type="radio" name="strategy" value="PSEUDONYMIZATION">
+              <div>
+                <strong>Seudonimización</strong>
+                <p>Reemplaza por IDs consistentes: <code>PERSONA_001</code>, <code>PERSONA_002</code>.</p>
+              </div>
+            </label>
+
+            <label class="strategy-option">
+              <input type="radio" name="strategy" value="MASKING">
+              <div>
+                <strong>Enmascaramiento</strong>
+                <p>Oculta caracteres parcialmente: <code>u*****@mail.com</code>, <code>*******05</code>.</p>
+              </div>
+            </label>
+
+            <div class="input-group">
+              <label for="customPlaceholder">Texto de reemplazo personalizado (opcional):</label>
+              <input type="text" id="customPlaceholder" placeholder="Ej: [CONFIDENCIAL]">
+            </div>
+
+            <button id="btnExecuteAnonymization" class="btn btn-primary btn-block btn-lg">
+              🛡️ Anonimizar Documento
+            </button>
+          </div>
+
+          <!-- Tarjeta para Añadir Manualmente -->
+          <div class="control-card">
+            <h3>Añadir Detección Manual</h3>
+            <p class="card-hint">¿El motor no detectó algún dato sensible? Agrégalo manualmente:</p>
+            <div class="input-group">
+              <input type="text" id="manualText" placeholder="Texto exacto a anonimizar">
+            </div>
+            <div class="input-group">
+              <select id="manualCategory" class="select-input select-block">
+                <option value="PERSON">Persona / Nombre</option>
+                <option value="ECUADOR_CEDULA">Cédula</option>
+                <option value="ECUADOR_RUC">RUC</option>
+                <option value="EMAIL">Correo electrónico</option>
+                <option value="PHONE">Teléfono</option>
+                <option value="CREDIT_CARD">Tarjeta bancaria</option>
+                <option value="BANK_ACCOUNT">Cuenta bancaria</option>
+                <option value="ADDRESS">Dirección física</option>
+                <option value="MEDICAL_DATA">Dato médico</option>
+                <option value="FINANCIAL_DATA">Dato financiero</option>
+              </select>
+            </div>
+            <button id="btnAddManual" class="btn btn-outline btn-block btn-sm">+ Agregar a la lista</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FASE 3: Descarga y Resultados -->
+    <section id="resultSection" class="view-panel">
+      <div class="result-card">
+        <div class="result-success-icon">✓</div>
+        <h2>¡Documento Anonimizado con Éxito!</h2>
+        <p>La información personal ha sido procesada de manera segura. Se verificó que el texto original no es recuperable.</p>
+
+        <div class="audit-box">
+          <div class="audit-row">
+            <span>Estrategia Aplicada:</span>
+            <strong id="resStrategy">REDACTION</strong>
+          </div>
+          <div class="audit-row">
+            <span>Entidades Anonimizadas:</span>
+            <strong id="resCount">0</strong>
+          </div>
+          <div class="audit-row">
+            <span>Verificación de Contenido Residual:</span>
+            <strong class="text-success" id="resVerification">APROBADA (0 texto residual)</strong>
+          </div>
+        </div>
+
+        <div id="resWarnings" class="warning-box" style="display: none;"></div>
+
+        <div class="result-actions">
+          <a id="btnDownload" href="#" class="btn btn-primary btn-lg" download>
+            📥 Descargar Documento Anonimizado
+          </a>
+          <button id="btnReset" class="btn btn-secondary btn-lg">
+            Procesar Otro Documento
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-container">
+      <span>AnonDoc v2.0 • Motor de Anonimización y Seguridad Documental</span>
+      <span>Privacidad por diseño • Sin telemetría de contenido</span>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
