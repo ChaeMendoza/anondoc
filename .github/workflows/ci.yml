@@ -35,7 +35,7 @@ jobs:
         with:
           dockerfile: Dockerfile
       - run: docker build -t anondoc:ci .
-      - uses: aquasecurity/trivy-action@0.28.0
+      - uses: aquasecurity/trivy-action@v0.28.0
         with:
           image-ref: anondoc:ci
           severity: HIGH,CRITICAL
