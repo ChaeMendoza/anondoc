@@ -20,7 +20,7 @@ jobs:
       - run: ruff check anondoc tests
       - run: bandit -q -r anondoc
       - run: pip-audit -r requirements.txt
-      - run: pytest -q
+      - run: python -m pytest -q
 
   secrets-and-images:
     runs-on: ubuntu-latest
