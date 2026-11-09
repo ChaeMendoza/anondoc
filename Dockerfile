@@ -18,7 +18,7 @@ RUN useradd -m -u 1001 anondocuser \
     && mkdir -p /tmp/anondoc \
     && chown -R anondocuser:anondocuser /tmp/anondoc \
     && chmod 700 /tmp/anondoc
-USER anondocuser
+USER 1001
 
 EXPOSE 8000
 
