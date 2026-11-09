@@ -51,6 +51,9 @@ class AppConfig:
     RATE_LIMIT_WINDOW_SECONDS: int = _env_int("ANONDOC_RATE_WINDOW", 60)
     UPLOAD_RATE_LIMIT: int = _env_int("ANONDOC_UPLOAD_RATE_LIMIT", 10)
 
+    # Optional local semantic layer (GLiNER). Off by default: deterministic detection only.
+    ENABLE_GLINER: bool = os.getenv("ANONDOC_ENABLE_GLINER", "False").lower() in ("true", "1", "yes")
+
     # Formats: real type is decided from content, never from client-provided MIME.
     ALLOWED_EXTENSIONS: Set[str] = {".pdf", ".docx"}
 
