@@ -36,6 +36,8 @@ class AnalysisResponseDTO(BaseModel):
     entities: List[PIIEntityDTO]
     categories_found: List[str]
     limitations: List[str] = Field(default_factory=list)
+    analysis_partial: bool = False
+    partial_reason: Optional[str] = None
 
 class EntityUpdateItemDTO(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -62,8 +64,13 @@ class AnonymizeResponseDTO(BaseModel):
     download_url: str
     warnings: List[str]
     stats: Dict[str, Any]
+    analysis_partial: bool = False
+    partial_reason: Optional[str] = None
 
 class HealthResponseDTO(BaseModel):
     status: str
     version: str
     active_jobs: int
+    max_file_size_bytes: int = 0
+    allowed_extensions: List[str] = Field(default_factory=list)
+    semantic_engine_enabled: bool = False

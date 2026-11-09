@@ -28,6 +28,14 @@
   </header>
 
   <main class="main-content">
+    <ol id="pipeline" class="pipeline" aria-label="Progreso del flujo de trabajo">
+      <li data-step="upload" data-status="pending"><span class="step-dot"></span><span class="step-label">Carga</span><span class="step-state">Pendiente</span></li>
+      <li data-step="analyze" data-status="pending"><span class="step-dot"></span><span class="step-label">Análisis</span><span class="step-state">Pendiente</span></li>
+      <li data-step="review" data-status="pending"><span class="step-dot"></span><span class="step-label">Revisión</span><span class="step-state">Pendiente</span></li>
+      <li data-step="anonymize" data-status="pending"><span class="step-dot"></span><span class="step-label">Anonimización</span><span class="step-state">Pendiente</span></li>
+      <li data-step="download" data-status="pending"><span class="step-dot"></span><span class="step-label">Descarga</span><span class="step-state">Pendiente</span></li>
+    </ol>
+
     <!-- FASE 1: Dashboard & Carga -->
     <section id="uploadSection" class="view-panel active">
       <div class="hero-text">
@@ -36,8 +44,8 @@
       </div>
 
       <div class="upload-card">
-        <div id="dropZone" class="drop-zone">
-          <input type="file" id="fileInput" accept=".pdf,.docx" style="display: none;">
+        <div id="dropZone" class="drop-zone" role="button" tabindex="0" aria-label="Seleccionar documento PDF o DOCX">
+          <input type="file" id="fileInput" accept=".pdf,.docx" hidden>
           <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
             <polyline points="17 8 12 3 7 8"/>
@@ -46,15 +54,36 @@
           <div class="drop-text">
             <strong>Haz clic para cargar</strong> o arrastra y suelta tu archivo aquí
           </div>
-          <div class="drop-subtext">Formatos admitidos: <strong>PDF</strong> y <strong>DOCX</strong> (hasta 25 MB)</div>
+          <div class="drop-subtext">Formatos admitidos: <strong id="allowedFormats">PDF y DOCX</strong> (hasta <strong id="maxSize">25 MB</strong>)</div>
         </div>
 
-        <div id="uploadProgress" class="progress-container" style="display: none;">
-          <div class="progress-bar-bg">
-            <div id="progressBar" class="progress-bar-fill"></div>
+        <div id="uploadError" class="alert alert-danger" role="alert" hidden></div>
+
+        <div id="fileCard" class="file-card" hidden>
+          <div class="file-info">
+            <div class="file-name" id="fileName"></div>
+            <div class="file-meta"><span id="fileFormat"></span> · <span id="fileSize"></span></div>
           </div>
-          <div id="progressText" class="progress-text">Analizando estructura y entidades...</div>
+          <div class="file-actions">
+            <button id="btnClearFile" type="button" class="btn btn-secondary btn-sm">Quitar</button>
+            <button id="btnStart" type="button" class="btn btn-primary">Cargar y analizar</button>
+          </div>
         </div>
+
+        <div id="uploadProgress" class="progress-container" hidden aria-live="polite">
+          <div class="progress-bar-bg"><div class="progress-bar-fill indeterminate"></div></div>
+          <div id="progressText" class="progress-text"></div>
+        </div>
+      </div>
+
+      <div class="alert alert-warning limits-notice" role="note">
+        <strong>Limitaciones del sistema</strong>
+        <ul>
+          <li>Los PDF compuestos únicamente por imágenes no tienen OCR: su texto no puede detectarse ni anonimizarse.</li>
+          <li>Un análisis parcial no equivale a una anonimización completa.</li>
+          <li>La detección automática puede producir falsos positivos y falsos negativos.</li>
+          <li>Revise siempre los resultados antes de utilizar o distribuir el documento.</li>
+        </ul>
       </div>
 
       <!-- Features Cards -->
@@ -81,9 +110,9 @@
     <section id="reviewSection" class="view-panel">
       <div class="review-header">
         <div>
-          <button id="btnBackToUpload" class="btn btn-secondary btn-sm">← Cargar otro</button>
+          <button id="btnBackToUpload" type="button" class="btn btn-secondary btn-sm">← Cargar otro</button>
           <h2 id="docTitle" class="doc-title">Documento en Revisión</h2>
-          <div class="doc-meta" id="docMeta">Analizando...</div>
+          <div class="doc-meta" id="docMeta"></div>
         </div>
         <div class="summary-chips">
           <div class="chip chip-total">Total: <strong id="chipTotal">0</strong></div>
@@ -92,6 +121,18 @@
           <div class="chip chip-low">Baja: <strong id="chipLow">0</strong></div>
         </div>
       </div>
+
+      <div id="partialBanner" class="alert alert-warning" role="alert" hidden>
+        <strong>Análisis parcial</strong>
+        <p id="partialMessage"></p>
+        <button id="btnReanalyze" type="button" class="btn btn-outline btn-sm">Reintentar análisis</button>
+      </div>
+      <div id="limitationsBox" class="alert alert-info" hidden>
+        <strong>Avisos del análisis</strong>
+        <ul id="limitationsList"></ul>
+      </div>
+      <div id="reviewError" class="alert alert-danger" role="alert" hidden></div>
+      <div id="categorySummary" class="category-summary" aria-label="Entidades por categoría"></div>
 
       <div class="review-layout">
         <!-- Columna Izquierda: Tabla interactiva -->
@@ -117,11 +158,12 @@
           <table class="entities-table">
             <thead>
               <tr>
-                <th width="40"><input type="checkbox" id="masterCheckbox" checked></th>
+                <th width="40"><input type="checkbox" id="masterCheckbox" checked aria-label="Seleccionar todas las detecciones"></th>
                 <th width="140">Categoría</th>
                 <th>Texto Detectado</th>
+                <th>Origen / validación</th>
                 <th width="110">Ubicación</th>
-                <th width="95">Confianza</th>
+                <th width="110">Confianza</th>
                 <th width="60">Acción</th>
               </tr>
             </thead>
@@ -166,7 +208,12 @@
               <input type="text" id="customPlaceholder" placeholder="Ej: [CONFIDENCIAL]">
             </div>
 
-            <button id="btnExecuteAnonymization" class="btn btn-primary btn-block btn-lg">
+            <label id="partialAckRow" class="ack-row" hidden>
+              <input type="checkbox" id="partialAck">
+              <span>Entiendo que el análisis fue parcial y que el resultado no es una anonimización completa.</span>
+            </label>
+
+            <button id="btnExecuteAnonymization" type="button" class="btn btn-primary btn-block btn-lg">
               🛡️ Anonimizar Documento
             </button>
           </div>
@@ -192,7 +239,7 @@
                 <option value="FINANCIAL_DATA">Dato financiero</option>
               </select>
             </div>
-            <button id="btnAddManual" class="btn btn-outline btn-block btn-sm">+ Agregar a la lista</button>
+            <button id="btnAddManual" type="button" class="btn btn-outline btn-block btn-sm">+ Agregar a la lista</button>
           </div>
         </aside>
       </div>
@@ -201,9 +248,9 @@
     <!-- FASE 3: Descarga y Resultados -->
     <section id="resultSection" class="view-panel">
       <div class="result-card">
-        <div class="result-success-icon">✓</div>
-        <h2>¡Documento Anonimizado con Éxito!</h2>
-        <p>La información personal ha sido procesada de manera segura. Se verificó que el texto original no es recuperable.</p>
+        <div id="resIcon" class="result-success-icon">✓</div>
+        <h2 id="resTitle">Documento anonimizado</h2>
+        <p id="resLead">La verificación automática no encontró texto residual de las entidades seleccionadas. Revise el documento antes de utilizarlo o distribuirlo.</p>
 
         <div class="audit-box">
           <div class="audit-row">
@@ -216,17 +263,21 @@
           </div>
           <div class="audit-row">
             <span>Verificación de Contenido Residual:</span>
-            <strong class="text-success" id="resVerification">APROBADA (0 texto residual)</strong>
+            <strong class="text-success" id="resVerification">Superada</strong>
           </div>
         </div>
 
-        <div id="resWarnings" class="warning-box" style="display: none;"></div>
+        <div id="resPartial" class="alert alert-warning" role="alert" hidden>
+          <strong>Resultado no definitivo.</strong> El análisis fue parcial: este documento no debe considerarse completamente anonimizado.
+        </div>
+        <div id="resWarnings" class="warning-box" hidden></div>
+        <div id="resError" class="alert alert-danger" role="alert" hidden></div>
 
         <div class="result-actions">
-          <a id="btnDownload" href="#" class="btn btn-primary btn-lg" download>
-            📥 Descargar Documento Anonimizado
-          </a>
-          <button id="btnReset" class="btn btn-secondary btn-lg">
+          <button id="btnDownload" type="button" class="btn btn-primary btn-lg">
+            📥 Descargar documento anonimizado
+          </button>
+          <button id="btnReset" type="button" class="btn btn-secondary btn-lg">
             Procesar Otro Documento
           </button>
         </div>

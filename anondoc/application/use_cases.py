@@ -29,6 +29,7 @@ from anondoc.domain.entities import (
     JobStatus,
     PIIEntity,
 )
+from anondoc.domain.interfaces import IPIIDetector, IStorageService
 from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
 from anondoc.infrastructure.sandbox.runner import WorkerError, run_worker
 from anondoc.infrastructure.security.inspector import DocumentRejected, detect_format
@@ -63,9 +64,13 @@ def display_name(filename: str) -> str:
 
 
 class DocumentUseCases:
-    def __init__(self, storage: SecureStorageService = None):
-        self.storage = storage or SecureStorageService()
-        self.detector = HybridPIIDetector()
+    def __init__(
+        self,
+        storage: IStorageService = None,
+        detector: IPIIDetector = None,
+    ):
+        self.storage = storage if storage is not None else SecureStorageService()
+        self.detector = detector if detector is not None else HybridPIIDetector()
 
     # ------------------------------------------------------------------ upload
     def upload_document(self, filename: str, content: bytes) -> DocumentUploadResponseDTO:
@@ -139,7 +144,18 @@ class DocumentUseCases:
                 raise
             entities = self.detector.detect_entities(resp["blocks"])
             job.entities = entities[: AppConfig.MAX_ENTITIES_PER_JOB]
-            job.limitations = resp.get("limitations", job.limitations)
+            base_limits = list(resp.get("limitations", job.limitations))
+            job.analysis_partial = bool(getattr(self.detector, "last_analysis_was_partial", False))
+            job.partial_reason = getattr(self.detector, "last_partial_reason", None) if job.analysis_partial else None
+            if job.analysis_partial:
+                partial_warn = (
+                    "ANÁLISIS PARCIAL: El motor semántico local (GLiNER) no estuvo disponible. "
+                    "La detección se realizó exclusivamente mediante reglas deterministas "
+                    "(posibles falsos negativos en nombres propios y datos contextuales)."
+                )
+                if partial_warn not in base_limits:
+                    base_limits.append(partial_warn)
+            job.limitations = base_limits
             job.status = JobStatus.ANALYZED
             job_manager.update_job(job)
             ops_log.info("op=analyze job=%s result=ok entities=%d duration_ms=%d",
@@ -250,6 +266,8 @@ class DocumentUseCases:
                 download_url=f"/api/v1/documents/{job.job_id}/download",
                 warnings=job.warnings,
                 stats=job.stats,
+                analysis_partial=job.analysis_partial,
+                partial_reason=job.partial_reason,
             )
         finally:
             if job.status == JobStatus.ANONYMIZING:
@@ -294,6 +312,8 @@ class DocumentUseCases:
             ],
             categories_found=sorted({e.category.value for e in job.entities}),
             limitations=job.limitations,
+            analysis_partial=job.analysis_partial,
+            partial_reason=job.partial_reason,
         )
 
     def purge_expired(self) -> int:
@@ -302,4 +322,11 @@ class DocumentUseCases:
         return self.storage.purge_expired_jobs()
 
     def health_check(self) -> HealthResponseDTO:
-        return HealthResponseDTO(status="healthy", version=AppConfig.VERSION, active_jobs=job_manager.count_active())
+        return HealthResponseDTO(
+            status="healthy",
+            version=AppConfig.VERSION,
+            active_jobs=job_manager.count_active(),
+            max_file_size_bytes=AppConfig.MAX_FILE_SIZE_BYTES,
+            allowed_extensions=sorted(AppConfig.ALLOWED_EXTENSIONS),
+            semantic_engine_enabled=AppConfig.ENABLE_GLINER,
+        )

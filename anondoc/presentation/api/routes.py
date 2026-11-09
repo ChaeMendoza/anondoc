@@ -22,11 +22,12 @@ from anondoc.application.job_manager import job_manager
 from anondoc.application.use_cases import DocumentUseCases
 from anondoc.config import AppConfig
 from anondoc.domain.entities import DocumentJob
+from anondoc.infrastructure.detection.factory import build_detector
 from anondoc.infrastructure.security.inspector import DocumentRejected
 from anondoc.infrastructure.storage.temp_storage import JOB_ID_RE
 
 router = APIRouter(prefix="/api/v1", tags=["Documents"])
-use_cases = DocumentUseCases()
+use_cases = DocumentUseCases(detector=build_detector())
 
 NOT_FOUND = HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trabajo no encontrado o no autorizado.")
 

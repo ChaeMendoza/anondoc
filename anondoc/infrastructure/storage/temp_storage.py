@@ -9,11 +9,12 @@ import time
 from pathlib import Path
 
 from anondoc.config import AppConfig
+from anondoc.domain.interfaces import IStorageService
 
 JOB_ID_RE = re.compile(r"^[A-Za-z0-9_-]{22}$")
 
 
-class SecureStorageService:
+class SecureStorageService(IStorageService):
     """Manages ephemeral files with strict per-job isolation."""
 
     def __init__(self, base_dir: Path = None):

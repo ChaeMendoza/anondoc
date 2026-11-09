@@ -84,3 +84,5 @@ class DocumentJob:
     access_token_hash: str = ""
     limitations: List[str] = field(default_factory=list)
     busy: bool = False
+    analysis_partial: bool = False
+    partial_reason: Optional[str] = None
