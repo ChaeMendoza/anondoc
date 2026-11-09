@@ -305,3 +305,64 @@ def test_rest_api_e2e_flow(tmp_path):
     assert health_res.status_code == 200
     assert health_res.json()["status"] == "healthy"
     client.headers.pop("Authorization")
+
+
+def test_use_cases_dependency_injection():
+    """Verifies that DocumentUseCases allows clean injection with explicit None handling."""
+    from anondoc.domain.interfaces import IPIIDetector, IStorageService
+    from anondoc.application.use_cases import DocumentUseCases
+    from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
+    from anondoc.infrastructure.storage.temp_storage import SecureStorageService
+
+    # 1. Default arguments
+    uc_default = DocumentUseCases()
+    assert isinstance(uc_default.detector, HybridPIIDetector)
+    assert isinstance(uc_default.storage, SecureStorageService)
+
+    # 2. Explicit None arguments fall back to defaults
+    uc_none = DocumentUseCases(storage=None, detector=None)
+    assert isinstance(uc_none.detector, HybridPIIDetector)
+    assert isinstance(uc_none.storage, SecureStorageService)
+
+    # 3. Custom implementations are strictly preserved
+    class DummyDetector(IPIIDetector):
+        def detect_entities(self, text_blocks):
+            return []
+
+    class DummyStorage(IStorageService):
+        def get_job_dir(self, job_id: str):
+            return Path("/tmp")
+        def save_upload(self, job_id: str, extension: str, content: bytes) -> str:
+            return "/tmp/fake.pdf"
+        def output_path(self, job_id: str, extension: str) -> str:
+            return "/tmp/fake_anon.pdf"
+        def remove_file(self, path: str) -> None:
+            pass
+        def cleanup_job(self, job_id: str) -> bool:
+            return True
+        def purge_expired_jobs(self, max_age_seconds: int = None) -> int:
+            return 0
+
+    custom_detector = DummyDetector()
+    custom_storage = DummyStorage()
+    uc_custom = DocumentUseCases(storage=custom_storage, detector=custom_detector)
+
+    assert uc_custom.detector is custom_detector
+    assert uc_custom.storage is custom_storage
+
+
+def test_gliner_and_composite_detectors():
+    """Verifies that GLiNERDetector and CompositePIIDetector execute correctly in the pipeline."""
+    from anondoc.infrastructure.detection.gliner_detector import GLiNERDetector
+    from anondoc.infrastructure.detection.composite_detector import CompositePIIDetector
+
+    gliner = GLiNERDetector(threshold=0.5)
+    assert gliner.is_ready
+
+    blocks = [{"text": "El ciudadano Mateo Morales de la Torre comparece en la ciudad de Quito.", "page_or_section": "1"}]
+    entities = gliner.detect_entities(blocks)
+    assert any(e.category == EntityCategory.PERSON for e in entities)
+
+    composite = CompositePIIDetector(semantic_detector=gliner)
+    merged = composite.detect_entities(blocks)
+    assert any(e.category == EntityCategory.PERSON for e in merged)

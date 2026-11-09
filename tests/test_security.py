@@ -640,5 +640,6 @@ def test_frontend_has_no_inline_handlers_external_hosts_or_unescaped_attrs():
     assert "onclick=" not in js and "onclick=" not in html
     assert not re.search(r"<script(?![^>]*src=)[^>]*>", html)
     assert "googleapis" not in html and not re.search(r'(?:src|href)="https?://', html)
-    assert '.replace(/"/g, "&quot;")' in js
+    # Document-derived text must reach the DOM only through textContent/properties, never interpolated markup.
+    assert "innerHTML" not in re.sub(r"\.innerHTML = '[^'$]*'", "", js)
     assert "Authorization" in js
