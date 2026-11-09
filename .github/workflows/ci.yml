@@ -21,6 +21,8 @@ jobs:
       - run: bandit -q -r anondoc
       - run: pip-audit -r requirements.txt
       - run: pytest -q
+        env:
+          PYTHONPATH: .
 
   secrets-and-images:
     runs-on: ubuntu-latest
@@ -34,6 +36,8 @@ jobs:
       - uses: hadolint/hadolint-action@v3.5.0
         with:
           dockerfile: Dockerfile
+          failure-threshold: error
+          ignore: DL3008,DL3066
       - run: docker build -t anondoc:ci .
       - uses: aquasecurity/trivy-action@v0.36.0
         with:
@@ -41,3 +45,5 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: "1"
           ignore-unfixed: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

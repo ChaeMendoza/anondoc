@@ -11,14 +11,14 @@ from unittest.mock import MagicMock
 import pytest
 
 from anondoc.config import AppConfig
-from anondoc.domain.entities import DetectionConfidence, EntityCategory, PIIEntity
+from anondoc.domain.entities import EntityCategory
 from anondoc.infrastructure.detection import factory
 from anondoc.infrastructure.detection.composite_detector import CompositePIIDetector
 from anondoc.infrastructure.detection.gliner_detector import GLiNERBusyError
 from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
 from anondoc.presentation.api.routes import use_cases
 
-from conftest import FAKE_EMAIL, FAKE_ID, auth, make_docx, make_pdf, upload_ok
+from conftest import FAKE_EMAIL, FAKE_ID, upload_ok
 
 WEB_DIR = Path(__file__).resolve().parent.parent / "anondoc" / "presentation" / "web"
 BLOCKS = [{"text": f"Correo {FAKE_EMAIL}", "page_or_section": "1"}]

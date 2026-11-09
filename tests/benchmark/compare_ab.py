@@ -13,7 +13,7 @@ import psutil
 import statistics
 import time
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 from anondoc.infrastructure.detection.composite_detector import CompositePIIDetector
 from anondoc.infrastructure.detection.gliner_detector import GLiNERDetector
@@ -33,8 +33,6 @@ def measure_detector_performance(
     # 1. Warm-up
     for _ in range(warmup_runs):
         _ = evaluate_detector(detector, dataset_path)
-
-    mem_after_warmup = process.memory_info().rss / (1024 * 1024)
 
     # 2. Timed iterations
     run_times_ms = []

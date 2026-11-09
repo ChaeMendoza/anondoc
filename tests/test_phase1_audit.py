@@ -17,14 +17,9 @@ from anondoc.domain.entities import (
     DetectionConfidence,
     EntityCategory,
     PIIEntity,
-    DocumentJob,
-    DocumentFormat,
-    JobStatus,
 )
-from anondoc.domain.validators import PIIValidators
 from anondoc.infrastructure.detection.composite_detector import (
     CompositePIIDetector,
-    HARD_DETERMINISTIC_CATEGORIES,
 )
 from anondoc.infrastructure.detection.gliner_detector import GLiNERDetector, GLiNERBusyError
 from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector

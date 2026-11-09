@@ -8,12 +8,10 @@ Covers:
 5. Duplicate predictions prevention.
 6. Conservation of totals (GT == TP + FN, Pred == TP + FP).
 """
-import pytest
-from pathlib import Path
 from unittest.mock import MagicMock
 
 from anondoc.domain.entities import DetectionConfidence, EntityCategory, PIIEntity
-from tests.benchmark.run_benchmark import evaluate_detector, spans_overlap, validate_benchmark_integrity
+from tests.benchmark.run_benchmark import evaluate_detector, spans_overlap
 
 
 def test_spans_overlap_logic():

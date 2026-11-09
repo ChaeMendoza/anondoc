@@ -14,7 +14,6 @@ from typing import Any, Dict, List, Optional, Set
 
 from anondoc.domain.entities import DetectionConfidence, EntityCategory, PIIEntity
 from anondoc.domain.interfaces import IPIIDetector
-from anondoc.infrastructure.detection.context_analyzer import ContextAnalyzer
 from anondoc.infrastructure.detection.gliner_detector import GLiNERBusyError
 from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
 

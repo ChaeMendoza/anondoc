@@ -9,10 +9,10 @@ import os
 import psutil
 import time
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any
 from collections import defaultdict
 
-from anondoc.domain.entities import EntityCategory, PIIEntity
+from anondoc.domain.entities import PIIEntity
 from anondoc.domain.interfaces import IPIIDetector
 from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
 
