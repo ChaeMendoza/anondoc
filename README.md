@@ -145,6 +145,8 @@ La aplicación estará disponible de inmediato en:
 - **Interfaz Web (Dashboard):** [http://localhost:8000](http://localhost:8000)
 - **Documentación OpenAPI:** desactivada por defecto; actívela solo en desarrollo con `ANONDOC_ENABLE_DOCS=true` (`/docs`).
 
+**Motor semántico local (GLiNER, opcional):** por defecto solo se usan las reglas deterministas. Para activar el motor híbrido ejecute con `ANONDOC_ENABLE_GLINER=true` (requiere el paquete `gliner` y el modelo en caché local; use `HF_HUB_OFFLINE=1` para impedir descargas). Si GLiNER está ocupado, falla o no está disponible, el análisis se marca como **parcial** y la interfaz lo advierte.
+
 ---
 
 ## 🐳 Ejecución mediante Docker
@@ -177,7 +179,7 @@ Todos los endpoints se encuentran versionados bajo el prefijo `/api/v1`. Los end
 | `POST` | `/api/v1/documents/{job_id}/anonymize` | Ejecuta la anonimización física según la estrategia elegida. |
 | `GET` | `/api/v1/documents/{job_id}/download` | Descarga el archivo anonimizado final. |
 | `DELETE`| `/api/v1/documents/{job_id}` | Elimina el trabajo y destruye los archivos temporales asociados. |
-| `GET` | `/api/v1/health` | Estado de salud del servicio y cantidad de trabajos activos. |
+| `GET` | `/api/v1/health` | Estado de salud, trabajos activos y límites de carga (`max_file_size_bytes`, `allowed_extensions`, `semantic_engine_enabled`). |
 
 ---
 
