@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional, Set
 
 from anondoc.domain.entities import DetectionConfidence, EntityCategory, PIIEntity
 from anondoc.domain.interfaces import IPIIDetector
+from anondoc.infrastructure.detection.context_analyzer import ContextAnalyzer
 from anondoc.infrastructure.detection.gliner_detector import GLiNERBusyError
 from anondoc.infrastructure.detection.pii_detector import HybridPIIDetector
 
@@ -189,8 +190,17 @@ class CompositePIIDetector(IPIIDetector):
 
             if det.category == best_sem.category:
                 # Rule 4: Same category -> Subsume to union span and elevate to HIGH confidence
-                new_start = min(det.start_char, best_sem.start_char)
-                new_end = max(det.end_char, best_sem.end_char)
+                sem_start, sem_end = best_sem.start_char, best_sem.end_char
+                if det.category == EntityCategory.PERSON:
+                    # Never absorb an administrative header ("Firmado Digitalmente por") into a person span.
+                    inner = ContextAnalyzer.refine_person_span(best_sem.original_text, 0, len(best_sem.original_text))
+                    if inner is None:
+                        sem_start, sem_end = det.start_char, det.end_char
+                    else:
+                        sem_start = best_sem.start_char + inner[0]
+                        sem_end = best_sem.start_char + inner[1]
+                new_start = min(det.start_char, sem_start)
+                new_end = max(det.end_char, sem_end)
                 det.start_char = new_start
                 det.end_char = new_end
                 det.confidence = DetectionConfidence.HIGH

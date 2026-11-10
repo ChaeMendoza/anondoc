@@ -165,6 +165,14 @@ class GLiNERDetector(IPIIDetector):
                 if ContextAnalyzer.is_common_institutional_phrase(matched_text):
                     continue
 
+                # Institutions, offices, roles and document terms are not personal data
+                if category in (EntityCategory.PERSON, EntityCategory.ADDRESS) and (
+                    ContextAnalyzer.is_nonpersonal_semantic_span(
+                        matched_text, text, start, category_is_address=category == EntityCategory.ADDRESS
+                    )
+                ):
+                    continue
+
                 # Calibrate confidence score
                 if score >= 0.85:
                     confidence = DetectionConfidence.HIGH

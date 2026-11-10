@@ -71,9 +71,22 @@ class DetectionPatterns:
         r"(?i)(?:sueldo|salario|remuneraci[oó]n|ingreso\s+mensual|endeudamiento|deuda|saldo\s+disponible)[\s\:\$]*(\$?\s*[0-9]{1,3}(?:[.,][0-9]{3})*(?:[.,][0-9]{2})?)\b"
     )
 
-    # 15. Nombres propios con contexto de tratamiento personal
+    # 15. Nombres propios con contexto de tratamiento personal.
+    # Solo las palabras de tratamiento ignoran mayúsculas; el nombre debe estar capitalizado (o en MAYÚSCULAS),
+    # de modo que verbos o preposiciones ("paciente refiere dolor", "titular de la cédula") no se capturen.
     PERSON_CONTEXT_REGEX = re.compile(
-        r"(?i)\b(?:sr\.|sra\.|dr\.|dra\.|ing\.|abg\.|lic\.|don|do[ñn]a|se[ñn]or|se[ñn]ora|ciudadano|ciudadana|paciente|titular|compareciente)\s+([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3})\b"
+        r"\b(?i:sr\.|sra\.|dr\.|dra\.|ing\.|abg\.|lic\.|don|do[ñn]a|se[ñn]or|se[ñn]ora|ciudadano|ciudadana|paciente|titular|compareciente)"
+        r"\s+((?:[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+|[A-ZÁÉÍÓÚÑ]{2,})"
+        r"(?:\s+(?:(?i:de|del|la|las|los)\s+){0,2}(?:[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+|[A-ZÁÉÍÓÚÑ]{2,})){1,3})\b"
+    )
+
+    # Nombre tras una fórmula de atribución documental ("Firmado digitalmente por GALITO JAPÓN NÚÑEZ").
+    # Sólo el disparador es insensible a mayúsculas; el nombre debe ir en Capitalizada o MAYÚSCULAS.
+    PERSON_ATTRIBUTION_REGEX = re.compile(
+        r"\b(?i:firmad[oa]\s+(?:digital|electr[oó]nic[oa]?)mente\s+por|firmad[oa]\s+por|elaborad[oa]\s+por|"
+        r"revisad[oa]\s+por|aprobad[oa]\s+por|notificad[oa]\s+a|responsable)\s*:?\s*"
+        r"((?:[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+|[A-ZÁÉÍÓÚÑ]{2,})"
+        r"(?:[ \t]+(?:(?i:de|del|la|las|los)[ \t]+){0,2}(?:[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+|[A-ZÁÉÍÓÚÑ]{2,})){1,4})\b"
     )
 
     # Nombres sin título explícito pero estructura de Nombre Apellido con mayúscula inicial
