@@ -357,7 +357,8 @@ def test_gliner_and_composite_detectors():
     from anondoc.infrastructure.detection.composite_detector import CompositePIIDetector
 
     gliner = GLiNERDetector(threshold=0.5)
-    assert gliner.is_ready
+    if not gliner.is_ready:
+        pytest.skip("GLiNER model not available in current environment")
 
     blocks = [{"text": "El ciudadano Mateo Morales de la Torre comparece en la ciudad de Quito.", "page_or_section": "1"}]
     entities = gliner.detect_entities(blocks)
