@@ -1,0 +1,1417 @@
+{
+  "label": "person_before_det",
+  "detector": "deterministic",
+  "datasets": {
+    "fp_tuning": {
+      "summary": {
+        "documents_count": 10,
+        "total_words": 364,
+        "total_ground_truth": 28,
+        "total_predictions": 27,
+        "total_tp": 27,
+        "total_fp": 0,
+        "total_fn": 1,
+        "precision": 1.0,
+        "recall": 0.9643,
+        "f1_score": 0.9818,
+        "fp_per_1000_words": 0.0,
+        "latency_total_ms": 8.73,
+        "latency_avg_per_doc_ms": 0.87,
+        "mem_rss_mb": 18.5,
+        "mem_delta_mb": 0.2
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 8,
+          "pred_count": 8,
+          "tp": 8,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "PERSON": {
+          "gt_count": 11,
+          "pred_count": 11,
+          "tp": 11,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PHONE": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [],
+      "false_negatives": [
+        {
+          "doc_id": "fp_tune_07_identificadores_con_expresion",
+          "category": "PASSPORT",
+          "text": "PA1234567",
+          "span": [
+            138,
+            147
+          ]
+        }
+      ],
+      "preservation_violations": [],
+      "ambiguous": [
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "text": "458921",
+          "detected_as": []
+        },
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "text": "7745123",
+          "detected_as": []
+        }
+      ],
+      "person": {
+        "gt_count": 11,
+        "pred_count": 11,
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "fp_holdout": {
+      "summary": {
+        "documents_count": 10,
+        "total_words": 328,
+        "total_ground_truth": 26,
+        "total_predictions": 26,
+        "total_tp": 23,
+        "total_fp": 3,
+        "total_fn": 3,
+        "precision": 0.8846,
+        "recall": 0.8846,
+        "f1_score": 0.8846,
+        "fp_per_1000_words": 9.15,
+        "latency_total_ms": 6.48,
+        "latency_avg_per_doc_ms": 0.65,
+        "mem_rss_mb": 18.5,
+        "mem_delta_mb": 0.0
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 7,
+          "pred_count": 8,
+          "tp": 7,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.875,
+          "recall": 1.0,
+          "f1": 0.9333
+        },
+        "EMAIL": {
+          "gt_count": 2,
+          "pred_count": 3,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "PERSON": {
+          "gt_count": 10,
+          "pred_count": 10,
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PHONE": {
+          "gt_count": 1,
+          "pred_count": 2,
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "ECUADOR_CEDULA",
+          "text": "2201938475",
+          "span": [
+            174,
+            184
+          ],
+          "context": "o de Talento Humano registra su cuenta de ahorros 2201938475 y un sueldo de $ 1.250,00. Teléfono de contacto:",
+          "layer": "deterministic",
+          "rule": "Cédula ecuatoriana válida"
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "PHONE",
+          "text": "593 99 876 5432",
+          "span": [
+            235,
+            250
+          ],
+          "context": "y un sueldo de $ 1.250,00. Teléfono de contacto: +593 99 876 5432.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "fp_hold_10_identificadores",
+          "category": "EMAIL",
+          "text": "notificaciones@iess.gob.ec",
+          "span": [
+            167,
+            193
+          ],
+          "context": "nstituto de Seguridad Social, dirección de correo notificaciones@iess.gob.ec no personal.",
+          "layer": "deterministic",
+          "rule": "Sintaxis de correo válida"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "fp_hold_03_clinica_privada",
+          "category": "MEDICAL_DATA",
+          "text": "diagnóstico: neumonía bilateral",
+          "span": [
+            146,
+            177
+          ]
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "BANK_ACCOUNT",
+          "text": "2201938475",
+          "span": [
+            174,
+            184
+          ]
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 1.250,00",
+          "span": [
+            200,
+            210
+          ]
+        }
+      ],
+      "preservation_violations": [
+        {
+          "doc_id": "fp_hold_08_acta_comparecencia",
+          "preserved": "Directora Nacional de Servicios",
+          "category": "ADDRESS",
+          "text": "sector Carolina. Atestigua la Directora Nacional de Servicios.",
+          "layer": "deterministic"
+        }
+      ],
+      "ambiguous": [
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "text": "+593 99 876 5432",
+          "detected_as": [
+            "PHONE:593 99 876 5432"
+          ]
+        },
+        {
+          "doc_id": "fp_hold_10_identificadores",
+          "text": "notificaciones@iess.gob.ec",
+          "detected_as": [
+            "EMAIL:notificaciones@iess.gob.ec"
+          ]
+        }
+      ],
+      "person": {
+        "gt_count": 10,
+        "pred_count": 10,
+        "tp": 10,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "person_fp": {
+      "summary": {
+        "documents_count": 8,
+        "total_words": 213,
+        "total_ground_truth": 15,
+        "total_predictions": 23,
+        "total_tp": 14,
+        "total_fp": 9,
+        "total_fn": 1,
+        "precision": 0.6087,
+        "recall": 0.9333,
+        "f1_score": 0.7368,
+        "fp_per_1000_words": 42.25,
+        "latency_total_ms": 5.38,
+        "latency_avg_per_doc_ms": 0.67,
+        "mem_rss_mb": 18.5,
+        "mem_delta_mb": 0.0
+      },
+      "by_category": {
+        "ECUADOR_CEDULA": {
+          "gt_count": 3,
+          "pred_count": 3,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 12,
+          "pred_count": 19,
+          "tp": 11,
+          "fp": 8,
+          "fn": 1,
+          "precision": 0.5789,
+          "recall": 0.9167,
+          "f1": 0.7097
+        },
+        "PHONE": {
+          "gt_count": 0,
+          "pred_count": 1,
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "pfp_01_sentencia_constitucional",
+          "category": "PERSON",
+          "text": "Constitución Art",
+          "span": [
+            57,
+            73
+          ],
+          "context": "IA DE ACCIÓN DE PROTECCIÓN. De conformidad con la Constitución Art. 88 y la Ley Orgánica de Garantías Jurisdiccional",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "pfp_01_sentencia_constitucional",
+          "category": "PERSON",
+          "text": "Control Constitucional",
+          "span": [
+            128,
+            150
+          ],
+          "context": "y la Ley Orgánica de Garantías Jurisdiccionales y Control Constitucional, la Corte Constitucional conoce el caso. La Polic",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "pfp_01_sentencia_constitucional",
+          "category": "PHONE",
+          "text": "17230-2026",
+          "span": [
+            330,
+            340
+          ],
+          "context": "392252, fue notificado. Acción de Protección Nro. 17230-2026.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "pfp_02_firma_digital_mayusculas",
+          "category": "PERSON",
+          "text": "Firmado Digitalmente",
+          "span": [
+            0,
+            20
+          ],
+          "context": "Firmado Digitalmente por GALITO JAPÓN NÚÑEZ Documento emitido por el H",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "pfp_03_encabezados_apilados",
+          "category": "PERSON",
+          "text": "Firmado Digitalmente",
+          "span": [
+            32,
+            52
+          ],
+          "context": "DEL HOSPITAL BÁSICO DE MACHACHI Firmado Digitalmente Instituto Ecuatoriano de Seguridad Social Garantí",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "pfp_03_encabezados_apilados",
+          "category": "PERSON",
+          "text": "Control Constitucional\nPolicía",
+          "span": [
+            122,
+            152
+          ],
+          "context": "no de Seguridad Social Garantías Jurisdiccionales Control Constitucional Policía Nacional Corte Constitucional Seguridad Social Ma",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "pfp_06_institucion_con_persona",
+          "category": "PERSON",
+          "text": "Firmado Digitalmente",
+          "span": [
+            160,
+            180
+          ],
+          "context": "nde al Instituto Ecuatoriano de Seguridad Social. Firmado Digitalmente por Dra. Karla Estefanía Morales Quishpe, Policía",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "pfp_07_fragmentos_incompletos",
+          "category": "PERSON",
+          "text": "Control Constitucional",
+          "span": [
+            13,
+            35
+          ],
+          "context": "…conforme al Control Constitucional y la Constitución Art. …en el marco de las Garant",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "pfp_07_fragmentos_incompletos",
+          "category": "PERSON",
+          "text": "Constitución Art",
+          "span": [
+            41,
+            57
+          ],
+          "context": "…conforme al Control Constitucional y la Constitución Art. …en el marco de las Garantías Jurisdiccionales d",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "pfp_02_firma_digital_mayusculas",
+          "category": "PERSON",
+          "text": "GALITO JAPÓN NÚÑEZ",
+          "span": [
+            25,
+            43
+          ]
+        }
+      ],
+      "preservation_violations": [
+        {
+          "doc_id": "pfp_01_sentencia_constitucional",
+          "preserved": "Constitución Art",
+          "category": "PERSON",
+          "text": "Constitución Art",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "pfp_01_sentencia_constitucional",
+          "preserved": "Control Constitucional",
+          "category": "PERSON",
+          "text": "Control Constitucional",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "pfp_02_firma_digital_mayusculas",
+          "preserved": "Firmado Digitalmente",
+          "category": "PERSON",
+          "text": "Firmado Digitalmente",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "pfp_03_encabezados_apilados",
+          "preserved": "Firmado Digitalmente",
+          "category": "PERSON",
+          "text": "Firmado Digitalmente",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "pfp_03_encabezados_apilados",
+          "preserved": "Control Constitucional",
+          "category": "PERSON",
+          "text": "Control Constitucional\nPolicía",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "pfp_03_encabezados_apilados",
+          "preserved": "Policía Nacional",
+          "category": "PERSON",
+          "text": "Control Constitucional\nPolicía",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "pfp_06_institucion_con_persona",
+          "preserved": "Firmado Digitalmente",
+          "category": "PERSON",
+          "text": "Firmado Digitalmente",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "pfp_07_fragmentos_incompletos",
+          "preserved": "Control Constitucional",
+          "category": "PERSON",
+          "text": "Control Constitucional",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "pfp_07_fragmentos_incompletos",
+          "preserved": "Constitución Art",
+          "category": "PERSON",
+          "text": "Constitución Art",
+          "layer": "deterministic"
+        }
+      ],
+      "ambiguous": [
+        {
+          "doc_id": "pfp_05_identificadores_documentales",
+          "text": "123456",
+          "detected_as": []
+        },
+        {
+          "doc_id": "pfp_05_identificadores_documentales",
+          "text": "001-2026",
+          "detected_as": []
+        },
+        {
+          "doc_id": "pfp_05_identificadores_documentales",
+          "text": "045",
+          "detected_as": []
+        }
+      ],
+      "person": {
+        "gt_count": 12,
+        "pred_count": 19,
+        "tp": 11,
+        "fp": 8,
+        "fn": 1,
+        "precision": 0.5789,
+        "recall": 0.9167,
+        "f1": 0.7097
+      }
+    },
+    "phase0": {
+      "summary": {
+        "documents_count": 15,
+        "total_words": 842,
+        "total_ground_truth": 76,
+        "total_predictions": 66,
+        "total_tp": 56,
+        "total_fp": 10,
+        "total_fn": 20,
+        "precision": 0.8485,
+        "recall": 0.7368,
+        "f1_score": 0.7887,
+        "fp_per_1000_words": 11.88,
+        "latency_total_ms": 12.51,
+        "latency_avg_per_doc_ms": 0.83,
+        "mem_rss_mb": 18.54,
+        "mem_delta_mb": 0.04
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 13,
+          "pred_count": 8,
+          "tp": 7,
+          "fp": 1,
+          "fn": 6,
+          "precision": 0.875,
+          "recall": 0.5385,
+          "f1": 0.6667
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 3,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.6667,
+          "f1": 0.8
+        },
+        "CREDIT_CARD": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 11,
+          "pred_count": 9,
+          "tp": 9,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.8182,
+          "f1": 0.9
+        },
+        "ECUADOR_RUC": {
+          "gt_count": 3,
+          "pred_count": 3,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 6,
+          "pred_count": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 5,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "IP_ADDRESS": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 3,
+          "pred_count": 2,
+          "tp": 1,
+          "fp": 1,
+          "fn": 2,
+          "precision": 0.5,
+          "recall": 0.3333,
+          "f1": 0.4
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 18,
+          "pred_count": 19,
+          "tp": 18,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.9474,
+          "recall": 1.0,
+          "f1": 0.973
+        },
+        "PHONE": {
+          "gt_count": 6,
+          "pred_count": 13,
+          "tp": 6,
+          "fp": 7,
+          "fn": 0,
+          "precision": 0.4615,
+          "recall": 1.0,
+          "f1": 0.6316
+        },
+        "USERNAME": {
+          "gt_count": 2,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "PHONE",
+          "text": "0910034068",
+          "span": [
+            107,
+            117
+          ],
+          "context": "Carlos Eduardo Jaramillo Vega, con cédula número 0910034068, con dirección electrónica carlos.jaramillo@litig",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_04_epicrisis_medica",
+          "category": "MEDICAL_DATA",
+          "text": "medicación: Enalapril 20mg cada 12 horas y Metformina 850mg",
+          "span": [
+            305,
+            364
+          ],
+          "context": "recordial de tres días de evolución. Se prescribe medicación: Enalapril 20mg cada 12 horas y Metformina 850mg. Teléfono de contacto de emergencia: 022456789.",
+          "layer": "deterministic",
+          "rule": "Información clínica / médica sensible"
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "PHONE",
+          "text": "220034567890",
+          "span": [
+            206,
+            218
+          ],
+          "context": "Cargo: Analista de Sistemas | Cuenta de ahorros: 220034567890 Sueldo básico unificado: $ 1.250,00 | Aporte pers",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_09_permiso_construccion",
+          "category": "ADDRESS",
+          "text": "sector Bellavista",
+          "span": [
+            281,
+            298
+          ],
+          "context": "asaje El Manantial No. 12 y Av. Mariana de Jesús, sector Bellavista. Contacto del proyectista: rodrigo_paredes@arquit",
+          "layer": "deterministic",
+          "rule": "Dirección física con nomenclatura vial"
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "PHONE",
+          "text": "0912345678",
+          "span": [
+            106,
+            116
+          ],
+          "context": "Titular: Patricia Alexandra Moncayo Rivas, cédula 0912345678, pasaporte A1234567, nacida el 28/11/1988 en Guay",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "PHONE",
+          "text": "453201511283034",
+          "span": [
+            237,
+            252
+          ],
+          "context": "a.moncayo@finanzas.com. Tarjeta de pago asignada: 453201511283034. Saldo disponible inicial: $ 3.500,00. Dirección",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "9991234567",
+          "span": [
+            32,
+            42
+          ],
+          "context": "Referencia de inventario código 9991234567 lote técnico 0001234567890. Resolución Administra",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "0001234567890",
+          "span": [
+            56,
+            69
+          ],
+          "context": "ncia de inventario código 9991234567 lote técnico 0001234567890. Resolución Administrativa número 1234-2024 emiti",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "7861001234567",
+          "span": [
+            233,
+            246
+          ],
+          "context": ", versión del firmware 1.0.4. Código de barra EAN 7861001234567 verificado en bodega central.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_15_nombres_sin_titulo_honorifico",
+          "category": "PERSON",
+          "text": "Pozo Carrión",
+          "span": [
+            197,
+            209
+          ],
+          "context": "a quebrada. Posteriormente llegó Andrea Belén del Pozo Carrión manifestando ser la propietaria del inmueble. Nin",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "doc_01_comparecencia_notarial",
+          "category": "ADDRESS",
+          "text": "Quito",
+          "span": [
+            16,
+            21
+          ]
+        },
+        {
+          "doc_id": "doc_01_comparecencia_notarial",
+          "category": "ADDRESS",
+          "text": "Av. Amazonas N24-150 y Colón",
+          "span": [
+            176,
+            204
+          ]
+        },
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "ADDRESS",
+          "text": "PICHINCHA",
+          "span": [
+            47,
+            56
+          ]
+        },
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "ECUADOR_CEDULA",
+          "text": "0910034068",
+          "span": [
+            107,
+            117
+          ]
+        },
+        {
+          "doc_id": "doc_05_certificado_oncologia",
+          "category": "MEDICAL_DATA",
+          "text": "tratamiento oncológico",
+          "span": [
+            71,
+            93
+          ]
+        },
+        {
+          "doc_id": "doc_05_certificado_oncologia",
+          "category": "MEDICAL_DATA",
+          "text": "adenocarcinoma gástrico estadio II",
+          "span": [
+            175,
+            209
+          ]
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "BANK_ACCOUNT",
+          "text": "220034567890",
+          "span": [
+            206,
+            218
+          ]
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 1.250,00",
+          "span": [
+            244,
+            254
+          ]
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 1.131,88",
+          "span": [
+            318,
+            328
+          ]
+        },
+        {
+          "doc_id": "doc_07_contrato_prestacion_servicios",
+          "category": "ADDRESS",
+          "text": "Manta",
+          "span": [
+            156,
+            161
+          ]
+        },
+        {
+          "doc_id": "doc_07_contrato_prestacion_servicios",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 2.800,00",
+          "span": [
+            345,
+            355
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "ECUADOR_CEDULA",
+          "text": "0912345678",
+          "span": [
+            106,
+            116
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "DATE_OF_BIRTH",
+          "text": "28/11/1988",
+          "span": [
+            148,
+            158
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "ADDRESS",
+          "text": "Guayaquil",
+          "span": [
+            162,
+            171
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "CREDIT_CARD",
+          "text": "453201511283034",
+          "span": [
+            237,
+            252
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 3.500,00",
+          "span": [
+            280,
+            290
+          ]
+        },
+        {
+          "doc_id": "doc_11_seguridad_informatica",
+          "category": "USERNAME",
+          "text": "admin_sec24",
+          "span": [
+            209,
+            220
+          ]
+        },
+        {
+          "doc_id": "doc_11_seguridad_informatica",
+          "category": "USERNAME",
+          "text": "sec_specialist",
+          "span": [
+            230,
+            244
+          ]
+        },
+        {
+          "doc_id": "doc_12_acta_entrega_recepcion",
+          "category": "ADDRESS",
+          "text": "Quito",
+          "span": [
+            63,
+            68
+          ]
+        },
+        {
+          "doc_id": "doc_12_acta_entrega_recepcion",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 45.600,00",
+          "span": [
+            361,
+            372
+          ]
+        }
+      ],
+      "preservation_violations": [],
+      "ambiguous": [],
+      "person": {
+        "gt_count": 18,
+        "pred_count": 19,
+        "tp": 18,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.9474,
+        "recall": 1.0,
+        "f1": 0.973
+      }
+    },
+    "phase1_holdout": {
+      "summary": {
+        "documents_count": 12,
+        "total_words": 699,
+        "total_ground_truth": 60,
+        "total_predictions": 51,
+        "total_tp": 48,
+        "total_fp": 3,
+        "total_fn": 12,
+        "precision": 0.9412,
+        "recall": 0.8,
+        "f1_score": 0.8649,
+        "fp_per_1000_words": 4.29,
+        "latency_total_ms": 9.82,
+        "latency_avg_per_doc_ms": 0.82,
+        "mem_rss_mb": 18.55,
+        "mem_delta_mb": 0.01
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 6,
+          "pred_count": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.8333,
+          "f1": 0.9091
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 2,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 10,
+          "pred_count": 9,
+          "tp": 9,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.9,
+          "f1": 0.9474
+        },
+        "ECUADOR_RUC": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 5,
+          "pred_count": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 5,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "IP_ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 15,
+          "pred_count": 15,
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PHONE": {
+          "gt_count": 6,
+          "pred_count": 9,
+          "tp": 6,
+          "fp": 3,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        "USERNAME": {
+          "gt_count": 2,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PHONE",
+          "text": "0918765432",
+          "span": [
+            240,
+            250
+          ],
+          "context": "dadano Luis Fernando Espinoza Carvajal con cédula 0918765432. El inmueble arrendado se ubica en Urbanización L",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PHONE",
+          "text": "1029384756",
+          "span": [
+            447,
+            457
+          ],
+          "context": "$ 650,00 que se acreditará a la cuenta corriente 1029384756 del Banco Bolivariano. Teléfono de contacto: +593",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "holdout_08_acta_asamblea_copropietarios",
+          "category": "PHONE",
+          "text": "4001239876",
+          "span": [
+            393,
+            403
+          ],
+          "context": "ónico nelson.tapia@inmuebles.ec y cuenta bancaria 4001239876.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "holdout_01_notificacion_tributaria",
+          "category": "ADDRESS",
+          "text": "Calle Junín 456 y Córdova, piso 3, oficina 302",
+          "span": [
+            256,
+            302
+          ]
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "ECUADOR_CEDULA",
+          "text": "0918765432",
+          "span": [
+            240,
+            250
+          ]
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 650,00",
+          "span": [
+            398,
+            406
+          ]
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "BANK_ACCOUNT",
+          "text": "1029384756",
+          "span": [
+            447,
+            457
+          ]
+        },
+        {
+          "doc_id": "holdout_03_historia_clinica_cirugia",
+          "category": "MEDICAL_DATA",
+          "text": "Colelitiasis aguda sintomática y colecistitis crónica litiásica",
+          "span": [
+            169,
+            232
+          ]
+        },
+        {
+          "doc_id": "holdout_04_acta_finiquito",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 3.420,50",
+          "span": [
+            323,
+            333
+          ]
+        },
+        {
+          "doc_id": "holdout_05_investigacion_forense",
+          "category": "USERNAME",
+          "text": "dark_operator",
+          "span": [
+            289,
+            302
+          ]
+        },
+        {
+          "doc_id": "holdout_05_investigacion_forense",
+          "category": "USERNAME",
+          "text": "sysaudit_root",
+          "span": [
+            314,
+            327
+          ]
+        },
+        {
+          "doc_id": "holdout_08_acta_asamblea_copropietarios",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 840,00",
+          "span": [
+            293,
+            301
+          ]
+        },
+        {
+          "doc_id": "holdout_08_acta_asamblea_copropietarios",
+          "category": "BANK_ACCOUNT",
+          "text": "4001239876",
+          "span": [
+            393,
+            403
+          ]
+        },
+        {
+          "doc_id": "holdout_09_declaracion_aduanera_courier",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 1.450,00",
+          "span": [
+            292,
+            302
+          ]
+        },
+        {
+          "doc_id": "holdout_10_minuta_donacion_inmueble",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 58.000,00",
+          "span": [
+            384,
+            395
+          ]
+        }
+      ],
+      "preservation_violations": [],
+      "ambiguous": [],
+      "person": {
+        "gt_count": 15,
+        "pred_count": 15,
+        "tp": 15,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    }
+  }
+}

@@ -1,0 +1,2524 @@
+{
+  "label": "before_hybrid",
+  "detector": "composite_gliner",
+  "datasets": {
+    "fp_tuning": {
+      "summary": {
+        "documents_count": 10,
+        "total_words": 364,
+        "total_ground_truth": 28,
+        "total_predictions": 63,
+        "total_tp": 27,
+        "total_fp": 36,
+        "total_fn": 1,
+        "precision": 0.4286,
+        "recall": 0.9643,
+        "f1_score": 0.5934,
+        "fp_per_1000_words": 98.9,
+        "latency_total_ms": 13057.2,
+        "latency_avg_per_doc_ms": 1305.72,
+        "mem_rss_mb": 1757.05,
+        "mem_delta_mb": 65.73
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 8,
+          "pred_count": 8,
+          "tp": 8,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "PERSON": {
+          "gt_count": 11,
+          "pred_count": 45,
+          "tp": 11,
+          "fp": 34,
+          "fn": 0,
+          "precision": 0.2444,
+          "recall": 1.0,
+          "f1": 0.3929
+        },
+        "PHONE": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 0,
+          "pred_count": 2,
+          "tp": 0,
+          "fp": 2,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "fp_tune_01_hospital",
+          "category": "PERSON",
+          "text": "Hospital General",
+          "span": [
+            71,
+            87
+          ],
+          "context": "NTE DE CALDERÓN - UNIDAD MÉDICA DE EMERGENCIAS El Hospital General recibió al paciente Rosa Elena Cabezas Mora, cédu",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_01_hospital",
+          "category": "PERSON",
+          "text": "Instituto Ecuatoriano",
+          "span": [
+            205,
+            226
+          ],
+          "context": "ivado desde el Centro de Salud de Chimbacalle. El Instituto Ecuatoriano de Seguridad Social cubre la atención conforme a",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_01_hospital",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "span": [
+            230,
+            246
+          ],
+          "context": "Salud de Chimbacalle. El Instituto Ecuatoriano de Seguridad Social cubre la atención conforme a la Seguridad Social",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_02_firma_electronica",
+          "category": "PERSON",
+          "text": "Gestión Documental",
+          "span": [
+            143,
+            161
+          ],
+          "context": "de la emisión. Validar la firma en el Sistema de Gestión Documental. Revisado por Mónica Alexandra Tapia Reyes, corre",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "category": "PERSON",
+          "text": "Matrícula Nro",
+          "span": [
+            0,
+            13
+          ],
+          "context": "Matrícula Nro. 458921 del Colegio de Abogados. Titular: Abg. Fe",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "span": [
+            146,
+            162
+          ],
+          "context": "la 1111392252. Número de afiliación: 7745123 a la Seguridad Social. Fecha de nacimiento: 22/08/1979.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "category": "PERSON",
+          "text": "Oficio Nro",
+          "span": [
+            0,
+            10
+          ],
+          "context": "Oficio Nro. MSP-DNE-2024-0456-O Memorando Nro. IESS-DG-2024-",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "category": "VEHICLE_PLATE",
+          "text": "DNE-2024",
+          "span": [
+            16,
+            24
+          ],
+          "context": "Oficio Nro. MSP-DNE-2024-0456-O Memorando Nro. IESS-DG-2024-0789-M Asunto:",
+          "layer": "deterministic",
+          "rule": "Formato de placa vehicular identificado (sin confirmación se"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "category": "PERSON",
+          "text": "Memorando Nro",
+          "span": [
+            32,
+            45
+          ],
+          "context": "Oficio Nro. MSP-DNE-2024-0456-O Memorando Nro. IESS-DG-2024-0789-M Asunto: Código Institucional",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "category": "PERSON",
+          "text": "Código Institucional",
+          "span": [
+            75,
+            95
+          ],
+          "context": "0456-O Memorando Nro. IESS-DG-2024-0789-M Asunto: Código Institucional del trámite 2024-117. Atentamente, Ing. Paola Bel",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "category": "PERSON",
+          "text": "Coordinadora General",
+          "span": [
+            156,
+            176
+          ],
+          "context": "e 2024-117. Atentamente, Ing. Paola Beltrán Haro, Coordinadora General.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_05_resolucion",
+          "category": "PERSON",
+          "text": "Dirección Administrativa",
+          "span": [
+            42,
+            66
+          ],
+          "context": "RESOLUCIÓN ADMINISTRATIVA No. 045-2024 La Dirección Administrativa y la Coordinación General, mediante el Departamen",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_05_resolucion",
+          "category": "PERSON",
+          "text": "Coordinación General",
+          "span": [
+            72,
+            92
+          ],
+          "context": "IVA No. 045-2024 La Dirección Administrativa y la Coordinación General, mediante el Departamento Jurídico, resuelven not",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_05_resolucion",
+          "category": "PERSON",
+          "text": "Departamento Jurídico",
+          "span": [
+            106,
+            127
+          ],
+          "context": "nistrativa y la Coordinación General, mediante el Departamento Jurídico, resuelven notificar al servidor Hugo Armando Sal",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_06_nombres_institucionales",
+          "category": "PERSON",
+          "text": "Hospital Pablo Arévalo Sotomayor",
+          "span": [
+            3,
+            35
+          ],
+          "context": "El Hospital Pablo Arévalo Sotomayor y la Unidad Educativa Eugenio Espejo figuran en e",
+          "layer": "dual",
+          "rule": "Confirmación dual y span ampliado: Reglas deterministas + GL"
+        },
+        {
+          "doc_id": "fp_tune_06_nombres_institucionales",
+          "category": "PERSON",
+          "text": "Unidad Educativa Eugenio Espejo",
+          "span": [
+            41,
+            72
+          ],
+          "context": "El Hospital Pablo Arévalo Sotomayor y la Unidad Educativa Eugenio Espejo figuran en el convenio. El paciente Pablo Arévalo",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_06_nombres_institucionales",
+          "category": "PERSON",
+          "text": "Simón Bolívar",
+          "span": [
+            213,
+            226
+          ],
+          "context": "a es 1108136324. La ambulancia circuló por la Av. Simón Bolívar hacia el Hospital Básico.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_06_nombres_institucionales",
+          "category": "PERSON",
+          "text": "Hospital Básico",
+          "span": [
+            236,
+            251
+          ],
+          "context": "ulancia circuló por la Av. Simón Bolívar hacia el Hospital Básico.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_07_identificadores_con_expresion",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "span": [
+            0,
+            16
+          ],
+          "context": "Seguridad Social del Ecuador - Afiliación individual. Cédula: 1717",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_07_identificadores_con_expresion",
+          "category": "PERSON",
+          "text": "cónyuge",
+          "span": [
+            114,
+            121
+          ],
+          "context": "17028755. Cédula de identidad Nro. 1739383022 del cónyuge. Pasaporte Nro. PA1234567. Teléfono celular 09876",
+          "layer": "semantic",
+          "rule": "GLiNER bi-encoder span (score: 0.62)"
+        },
+        {
+          "doc_id": "fp_tune_07_identificadores_con_expresion",
+          "category": "PERSON",
+          "text": "Pasaporte Nro",
+          "span": [
+            123,
+            136
+          ],
+          "context": "Cédula de identidad Nro. 1739383022 del cónyuge. Pasaporte Nro. PA1234567. Teléfono celular 0987654321.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Coordinación Zonal",
+          "span": [
+            28,
+            46
+          ],
+          "context": "MINISTERIO DE SALUD PÚBLICA Coordinación Zonal 9 - Dirección Distrital 17D03 El Centro de Salud",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Dirección Distrital",
+          "span": [
+            51,
+            70
+          ],
+          "context": "INISTERIO DE SALUD PÚBLICA Coordinación Zonal 9 - Dirección Distrital 17D03 El Centro de Salud Tipo C Chimbacalle, el H",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Salud Tipo",
+          "span": [
+            90,
+            100
+          ],
+          "context": "Zonal 9 - Dirección Distrital 17D03 El Centro de Salud Tipo C Chimbacalle, el Hospital Básico de Cayambe y el",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Hospital Básico",
+          "span": [
+            119,
+            134
+          ],
+          "context": "l 17D03 El Centro de Salud Tipo C Chimbacalle, el Hospital Básico de Cayambe y el Hospital General Enrique Garcés s",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Hospital General Enrique Garcés",
+          "span": [
+            151,
+            182
+          ],
+          "context": "C Chimbacalle, el Hospital Básico de Cayambe y el Hospital General Enrique Garcés son parte de la Red Pública Integral de Salud. La",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Red Pública Integral",
+          "span": [
+            199,
+            219
+          ],
+          "context": "l Hospital General Enrique Garcés son parte de la Red Pública Integral de Salud. La Gerencia Hospitalaria y el Departame",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Gerencia Hospitalaria",
+          "span": [
+            233,
+            254
+          ],
+          "context": "son parte de la Red Pública Integral de Salud. La Gerencia Hospitalaria y el Departamento Financiero aprobaron el Plan Op",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Departamento Financiero",
+          "span": [
+            260,
+            283
+          ],
+          "context": "Integral de Salud. La Gerencia Hospitalaria y el Departamento Financiero aprobaron el Plan Operativo Anual.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "category": "PERSON",
+          "text": "Plan Operativo Anual",
+          "span": [
+            297,
+            317
+          ],
+          "context": "talaria y el Departamento Financiero aprobaron el Plan Operativo Anual.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_tune_09_comparecencia_notarial",
+          "category": "PERSON",
+          "text": "declara bajo juramento no",
+          "span": [
+            225,
+            250
+          ],
+          "context": "lio: Pasaje Los Pinos 123, sector La Floresta. El compareciente declara bajo juramento no adeudar al Servicio de Rentas Internas.",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "fp_tune_09_comparecencia_notarial",
+          "category": "PERSON",
+          "text": "Rentas Internas",
+          "span": [
+            274,
+            289
+          ],
+          "context": "declara bajo juramento no adeudar al Servicio de Rentas Internas.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_tune_10_titulos_y_cargos",
+          "category": "PERSON",
+          "text": "refiere dolor precordial desde",
+          "span": [
+            12,
+            42
+          ],
+          "context": "El paciente refiere dolor precordial desde ayer. La señora Diana Lucía Vera Caicedo es titul",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "fp_tune_10_titulos_y_cargos",
+          "category": "PERSON",
+          "text": "de la cédula",
+          "span": [
+            95,
+            107
+          ],
+          "context": "desde ayer. La señora Diana Lucía Vera Caicedo es titular de la cédula 1010577920. Se dirige al Señor Director General d",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "fp_tune_10_titulos_y_cargos",
+          "category": "PERSON",
+          "text": "Director General del Registro",
+          "span": [
+            139,
+            168
+          ],
+          "context": "es titular de la cédula 1010577920. Se dirige al Señor Director General del Registro Civil la presente solicitud para la licencia de c",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "fp_tune_10_titulos_y_cargos",
+          "category": "VEHICLE_PLATE",
+          "text": "LMU-2024",
+          "span": [
+            234,
+            242
+          ],
+          "context": "te solicitud para la licencia de construcción No. LMU-2024-8971.",
+          "layer": "deterministic",
+          "rule": "Formato de placa vehicular identificado (sin confirmación se"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "fp_tune_07_identificadores_con_expresion",
+          "category": "PASSPORT",
+          "text": "PA1234567",
+          "span": [
+            138,
+            147
+          ]
+        }
+      ],
+      "preservation_violations": [
+        {
+          "doc_id": "fp_tune_01_hospital",
+          "preserved": "Hospital General",
+          "category": "PERSON",
+          "text": "Hospital General",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_01_hospital",
+          "preserved": "Instituto Ecuatoriano de Seguridad Social",
+          "category": "PERSON",
+          "text": "Instituto Ecuatoriano",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_01_hospital",
+          "preserved": "Instituto Ecuatoriano de Seguridad Social",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_01_hospital",
+          "preserved": "Seguridad Social",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_02_firma_electronica",
+          "preserved": "Gestión Documental",
+          "category": "PERSON",
+          "text": "Gestión Documental",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "preserved": "Matrícula Nro",
+          "category": "PERSON",
+          "text": "Matrícula Nro",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "preserved": "Seguridad Social",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "preserved": "Oficio Nro",
+          "category": "PERSON",
+          "text": "Oficio Nro",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "preserved": "MSP-DNE-2024-0456-O",
+          "category": "VEHICLE_PLATE",
+          "text": "DNE-2024",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "preserved": "Memorando Nro",
+          "category": "PERSON",
+          "text": "Memorando Nro",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "preserved": "Código Institucional",
+          "category": "PERSON",
+          "text": "Código Institucional",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_04_oficios",
+          "preserved": "Coordinadora General",
+          "category": "PERSON",
+          "text": "Coordinadora General",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_05_resolucion",
+          "preserved": "Dirección Administrativa",
+          "category": "PERSON",
+          "text": "Dirección Administrativa",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_05_resolucion",
+          "preserved": "Coordinación General",
+          "category": "PERSON",
+          "text": "Coordinación General",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_05_resolucion",
+          "preserved": "Departamento Jurídico",
+          "category": "PERSON",
+          "text": "Departamento Jurídico",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_05_resolucion",
+          "preserved": "Departamento Jurídico",
+          "category": "PERSON",
+          "text": "Departamento Jurídico\nAndrés Felipe",
+          "layer": "dual"
+        },
+        {
+          "doc_id": "fp_tune_06_nombres_institucionales",
+          "preserved": "Hospital Pablo Arévalo Sotomayor",
+          "category": "PERSON",
+          "text": "Hospital Pablo Arévalo Sotomayor",
+          "layer": "dual"
+        },
+        {
+          "doc_id": "fp_tune_06_nombres_institucionales",
+          "preserved": "Unidad Educativa Eugenio Espejo",
+          "category": "PERSON",
+          "text": "Unidad Educativa Eugenio Espejo",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_06_nombres_institucionales",
+          "preserved": "Simón Bolívar",
+          "category": "PERSON",
+          "text": "Simón Bolívar",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_06_nombres_institucionales",
+          "preserved": "Hospital Básico",
+          "category": "PERSON",
+          "text": "Hospital Básico",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_07_identificadores_con_expresion",
+          "preserved": "Seguridad Social",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Coordinación Zonal",
+          "category": "PERSON",
+          "text": "Coordinación Zonal",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Dirección Distrital",
+          "category": "PERSON",
+          "text": "Dirección Distrital",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Centro de Salud Tipo C Chimbacalle",
+          "category": "PERSON",
+          "text": "Salud Tipo",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Hospital Básico de Cayambe",
+          "category": "PERSON",
+          "text": "Hospital Básico",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Hospital General Enrique Garcés",
+          "category": "PERSON",
+          "text": "Hospital General Enrique Garcés",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Red Pública Integral",
+          "category": "PERSON",
+          "text": "Red Pública Integral",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Gerencia Hospitalaria",
+          "category": "PERSON",
+          "text": "Gerencia Hospitalaria",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Departamento Financiero",
+          "category": "PERSON",
+          "text": "Departamento Financiero",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_08_control_negativo_institucional",
+          "preserved": "Plan Operativo Anual",
+          "category": "PERSON",
+          "text": "Plan Operativo Anual",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_09_comparecencia_notarial",
+          "preserved": "Notaría Primera",
+          "category": "PERSON",
+          "text": "Notaría Primera Gabriela Alejandra",
+          "layer": "dual"
+        },
+        {
+          "doc_id": "fp_tune_09_comparecencia_notarial",
+          "preserved": "declara bajo juramento no",
+          "category": "PERSON",
+          "text": "declara bajo juramento no",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_09_comparecencia_notarial",
+          "preserved": "Rentas Internas",
+          "category": "PERSON",
+          "text": "Rentas Internas",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_10_titulos_y_cargos",
+          "preserved": "refiere dolor precordial",
+          "category": "PERSON",
+          "text": "refiere dolor precordial desde",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_10_titulos_y_cargos",
+          "preserved": "titular de la cédula",
+          "category": "PERSON",
+          "text": "de la cédula",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_10_titulos_y_cargos",
+          "preserved": "Director General del Registro Civil",
+          "category": "PERSON",
+          "text": "Director General del Registro",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_tune_10_titulos_y_cargos",
+          "preserved": "LMU-2024-8971",
+          "category": "VEHICLE_PLATE",
+          "text": "LMU-2024",
+          "layer": "deterministic"
+        }
+      ],
+      "ambiguous": [
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "text": "458921",
+          "detected_as": []
+        },
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "text": "7745123",
+          "detected_as": []
+        }
+      ],
+      "person": {
+        "gt_count": 11,
+        "pred_count": 45,
+        "tp": 11,
+        "fp": 34,
+        "fn": 0,
+        "precision": 0.2444,
+        "recall": 1.0,
+        "f1": 0.3929
+      }
+    },
+    "fp_holdout": {
+      "summary": {
+        "documents_count": 10,
+        "total_words": 328,
+        "total_ground_truth": 26,
+        "total_predictions": 54,
+        "total_tp": 25,
+        "total_fp": 29,
+        "total_fn": 1,
+        "precision": 0.463,
+        "recall": 0.9615,
+        "f1_score": 0.625,
+        "fp_per_1000_words": 88.41,
+        "latency_total_ms": 12255.3,
+        "latency_avg_per_doc_ms": 1225.53,
+        "mem_rss_mb": 1757.86,
+        "mem_delta_mb": 0.81
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 7,
+          "pred_count": 8,
+          "tp": 7,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.875,
+          "recall": 1.0,
+          "f1": 0.9333
+        },
+        "EMAIL": {
+          "gt_count": 2,
+          "pred_count": 3,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 10,
+          "pred_count": 36,
+          "tp": 10,
+          "fp": 26,
+          "fn": 0,
+          "precision": 0.2778,
+          "recall": 1.0,
+          "f1": 0.4348
+        },
+        "PHONE": {
+          "gt_count": 1,
+          "pred_count": 2,
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "fp_hold_01_registro_civil",
+          "category": "PERSON",
+          "text": "Dirección Provincial",
+          "span": [
+            68,
+            88
+          ],
+          "context": "DE REGISTRO CIVIL, IDENTIFICACIÓN Y CEDULACIÓN La Dirección Provincial de Pichincha certifica que Gloria Esperanza Quish",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_01_registro_civil",
+          "category": "PERSON",
+          "text": "Agencia Matriz",
+          "span": [
+            211,
+            225
+          ],
+          "context": "34509258, solicitó la partida de nacimiento en la Agencia Matriz del Registro Civil. Contacto: gloria.quishpe@corr",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_01_registro_civil",
+          "category": "PERSON",
+          "text": "Registro Civil",
+          "span": [
+            230,
+            244
+          ],
+          "context": "la partida de nacimiento en la Agencia Matriz del Registro Civil. Contacto: gloria.quishpe@correo.com.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_02_unidad_judicial",
+          "category": "PERSON",
+          "text": "Unidad Judicial",
+          "span": [
+            76,
+            91
+          ],
+          "context": ", MUJER, NIÑEZ Y ADOLESCENCIA El Secretario de la Unidad Judicial notifica a Marcos Vinicio Aguirre Toapanta, con c",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_02_unidad_judicial",
+          "category": "PERSON",
+          "text": "Resolución Judicial",
+          "span": [
+            162,
+            181
+          ],
+          "context": "nicio Aguirre Toapanta, con cédula 1309211975, la Resolución Judicial dictada en el proceso. La Fiscalía General y el C",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_02_unidad_judicial",
+          "category": "PERSON",
+          "text": "Fiscalía General",
+          "span": [
+            208,
+            224
+          ],
+          "context": "la Resolución Judicial dictada en el proceso. La Fiscalía General y el Consejo de la Judicatura recibieron copia. T",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_03_clinica_privada",
+          "category": "PERSON",
+          "text": "Clínica Metropolitana",
+          "span": [
+            0,
+            21
+          ],
+          "context": "Clínica Metropolitana de Especialidades. El paciente Iván Eduardo Cárde",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_03_clinica_privada",
+          "category": "PERSON",
+          "text": "Cuidados Intensivos",
+          "span": [
+            122,
+            141
+          ],
+          "context": "as Bravo, cédula 1138156086, acude a la Unidad de Cuidados Intensivos con diagnóstico: neumonía bilateral. La Seguridad",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_03_clinica_privada",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "span": [
+            182,
+            198
+          ],
+          "context": "ntensivos con diagnóstico: neumonía bilateral. La Seguridad Social autoriza el Código de Prestación 8841.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_04_gobierno_local",
+          "category": "PERSON",
+          "text": "Gobierno Autónomo Descentralizado Municipal",
+          "span": [
+            0,
+            43
+          ],
+          "context": "Gobierno Autónomo Descentralizado Municipal. Junta Parroquial Rural de Conocoto. Se notifica",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_04_gobierno_local",
+          "category": "PERSON",
+          "text": "Junta Parroquial Rural",
+          "span": [
+            45,
+            67
+          ],
+          "context": "Gobierno Autónomo Descentralizado Municipal. Junta Parroquial Rural de Conocoto. Se notifica a la ciudadana Verónica",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_04_gobierno_local",
+          "category": "PERSON",
+          "text": "Secretaría Técnica",
+          "span": [
+            190,
+            208
+          ],
+          "context": "domiciliada en Avenida Los Shyris N34-56, que la Secretaría Técnica emitió el Acta de Inspección Nro. 0098-2024.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_04_gobierno_local",
+          "category": "PERSON",
+          "text": "Inspección Nro",
+          "span": [
+            227,
+            241
+          ],
+          "context": "4-56, que la Secretaría Técnica emitió el Acta de Inspección Nro. 0098-2024.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_05_pie_de_pagina",
+          "category": "PERSON",
+          "text": "Portal Institucional",
+          "span": [
+            174,
+            194
+          ],
+          "context": "arrera. Para verificar la autenticidad ingrese al Portal Institucional. Ref. Código Documental 55-AB.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_05_pie_de_pagina",
+          "category": "PERSON",
+          "text": "Código Documental",
+          "span": [
+            201,
+            218
+          ],
+          "context": "utenticidad ingrese al Portal Institucional. Ref. Código Documental 55-AB.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "PERSON",
+          "text": "Gerencia General",
+          "span": [
+            29,
+            45
+          ],
+          "context": "Contrato de trabajo entre la Gerencia General y el trabajador Cristian Rolando Yánez Lara, cédu",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "PERSON",
+          "text": "Talento Humano",
+          "span": [
+            129,
+            143
+          ],
+          "context": "Yánez Lara, cédula 1354820415. El Departamento de Talento Humano registra su cuenta de ahorros 2201938475 y un sue",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "ECUADOR_CEDULA",
+          "text": "2201938475",
+          "span": [
+            174,
+            184
+          ],
+          "context": "o de Talento Humano registra su cuenta de ahorros 2201938475 y un sueldo de $ 1.250,00. Teléfono de contacto:",
+          "layer": "deterministic",
+          "rule": "Cédula ecuatoriana válida"
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "PHONE",
+          "text": "593 99 876 5432",
+          "span": [
+            235,
+            250
+          ],
+          "context": "y un sueldo de $ 1.250,00. Teléfono de contacto: +593 99 876 5432.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "category": "PERSON",
+          "text": "Subsecretaría Nacional",
+          "span": [
+            3,
+            25
+          ],
+          "context": "La Subsecretaría Nacional de Planificación y la Secretaría General de la Pr",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "category": "PERSON",
+          "text": "Secretaría General",
+          "span": [
+            48,
+            66
+          ],
+          "context": "La Subsecretaría Nacional de Planificación y la Secretaría General de la Presidencia presentaron el Informe Anual de",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "category": "PERSON",
+          "text": "Informe Anual",
+          "span": [
+            100,
+            113
+          ],
+          "context": "cretaría General de la Presidencia presentaron el Informe Anual de Gestión. El Servicio Ecuatoriano de Normalizac",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "category": "PERSON",
+          "text": "Servicio Ecuatoriano",
+          "span": [
+            129,
+            149
+          ],
+          "context": "encia presentaron el Informe Anual de Gestión. El Servicio Ecuatoriano de Normalización, el Instituto Nacional de Estadí",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "category": "PERSON",
+          "text": "Instituto Nacional",
+          "span": [
+            171,
+            189
+          ],
+          "context": "ión. El Servicio Ecuatoriano de Normalización, el Instituto Nacional de Estadística y la Superintendencia de Bancos pa",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "category": "PERSON",
+          "text": "Mesa Técnica",
+          "span": [
+            256,
+            268
+          ],
+          "context": "la Superintendencia de Bancos participaron en la Mesa Técnica de Coordinación Interinstitucional.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_hold_08_acta_comparecencia",
+          "category": "PERSON",
+          "text": "Calle Bolívar",
+          "span": [
+            182,
+            195
+          ],
+          "context": "rte firma Ricardo Esteban Lalama Gómez, domicilio Calle Bolívar y Sucre S/N, sector Carolina. Atestigua la Direct",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (solapa con AD"
+        },
+        {
+          "doc_id": "fp_hold_09_persona_con_cargo_pegado",
+          "category": "PERSON",
+          "text": "Coordinador Zonal\nDirección Financiera",
+          "span": [
+            43,
+            81
+          ],
+          "context": "Atentamente, Mateo Sebastián Reinoso Cueva Coordinador Zonal Dirección Financiera Correo: mateo.reinoso@ministerio.gob.ec",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "fp_hold_10_identificadores",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "span": [
+            0,
+            16
+          ],
+          "context": "Seguridad Social: afiliado con cédula 1316990009. Cédula: 07110218",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "fp_hold_10_identificadores",
+          "category": "EMAIL",
+          "text": "notificaciones@iess.gob.ec",
+          "span": [
+            167,
+            193
+          ],
+          "context": "nstituto de Seguridad Social, dirección de correo notificaciones@iess.gob.ec no personal.",
+          "layer": "deterministic",
+          "rule": "Sintaxis de correo válida"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "BANK_ACCOUNT",
+          "text": "2201938475",
+          "span": [
+            174,
+            184
+          ]
+        }
+      ],
+      "preservation_violations": [
+        {
+          "doc_id": "fp_hold_01_registro_civil",
+          "preserved": "Dirección Provincial",
+          "category": "PERSON",
+          "text": "Dirección Provincial",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_01_registro_civil",
+          "preserved": "Agencia Matriz",
+          "category": "PERSON",
+          "text": "Agencia Matriz",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_01_registro_civil",
+          "preserved": "Registro Civil",
+          "category": "PERSON",
+          "text": "Registro Civil",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_02_unidad_judicial",
+          "preserved": "Resolución Judicial",
+          "category": "PERSON",
+          "text": "Resolución Judicial",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_02_unidad_judicial",
+          "preserved": "Fiscalía General",
+          "category": "PERSON",
+          "text": "Fiscalía General",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_03_clinica_privada",
+          "preserved": "Seguridad Social",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_03_clinica_privada",
+          "preserved": "Unidad de Cuidados Intensivos",
+          "category": "PERSON",
+          "text": "Cuidados Intensivos",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_04_gobierno_local",
+          "preserved": "Junta Parroquial Rural",
+          "category": "PERSON",
+          "text": "Junta Parroquial Rural",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_04_gobierno_local",
+          "preserved": "Secretaría Técnica",
+          "category": "PERSON",
+          "text": "Secretaría Técnica",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_04_gobierno_local",
+          "preserved": "Acta de Inspección Nro",
+          "category": "PERSON",
+          "text": "Inspección Nro",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_05_pie_de_pagina",
+          "preserved": "Portal Institucional",
+          "category": "PERSON",
+          "text": "Portal Institucional",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_05_pie_de_pagina",
+          "preserved": "Código Documental",
+          "category": "PERSON",
+          "text": "Código Documental",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "preserved": "Gerencia General",
+          "category": "PERSON",
+          "text": "Gerencia General",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "preserved": "Talento Humano",
+          "category": "PERSON",
+          "text": "Talento Humano",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "preserved": "Subsecretaría Nacional",
+          "category": "PERSON",
+          "text": "Subsecretaría Nacional",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "preserved": "Secretaría General",
+          "category": "PERSON",
+          "text": "Secretaría General",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "preserved": "Informe Anual",
+          "category": "PERSON",
+          "text": "Informe Anual",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "preserved": "Servicio Ecuatoriano",
+          "category": "PERSON",
+          "text": "Servicio Ecuatoriano",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "preserved": "Instituto Nacional",
+          "category": "PERSON",
+          "text": "Instituto Nacional",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_07_control_negativo",
+          "preserved": "Mesa Técnica",
+          "category": "PERSON",
+          "text": "Mesa Técnica",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_08_acta_comparecencia",
+          "preserved": "Directora Nacional de Servicios",
+          "category": "ADDRESS",
+          "text": "sector Carolina. Atestigua la Directora Nacional de Servicios.",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_09_persona_con_cargo_pegado",
+          "preserved": "Coordinador Zonal",
+          "category": "PERSON",
+          "text": "Coordinador Zonal\nDirección Financiera",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_09_persona_con_cargo_pegado",
+          "preserved": "Dirección Financiera",
+          "category": "PERSON",
+          "text": "Coordinador Zonal\nDirección Financiera",
+          "layer": "deterministic"
+        },
+        {
+          "doc_id": "fp_hold_10_identificadores",
+          "preserved": "Seguridad Social",
+          "category": "PERSON",
+          "text": "Seguridad Social",
+          "layer": "deterministic"
+        }
+      ],
+      "ambiguous": [
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "text": "+593 99 876 5432",
+          "detected_as": [
+            "PHONE:593 99 876 5432"
+          ]
+        },
+        {
+          "doc_id": "fp_hold_10_identificadores",
+          "text": "notificaciones@iess.gob.ec",
+          "detected_as": [
+            "EMAIL:notificaciones@iess.gob.ec"
+          ]
+        }
+      ],
+      "person": {
+        "gt_count": 10,
+        "pred_count": 36,
+        "tp": 10,
+        "fp": 26,
+        "fn": 0,
+        "precision": 0.2778,
+        "recall": 1.0,
+        "f1": 0.4348
+      }
+    },
+    "phase0": {
+      "summary": {
+        "documents_count": 15,
+        "total_words": 842,
+        "total_ground_truth": 76,
+        "total_predictions": 85,
+        "total_tp": 64,
+        "total_fp": 21,
+        "total_fn": 12,
+        "precision": 0.7529,
+        "recall": 0.8421,
+        "f1_score": 0.795,
+        "fp_per_1000_words": 24.94,
+        "latency_total_ms": 22399.61,
+        "latency_avg_per_doc_ms": 1493.31,
+        "mem_rss_mb": 1774.42,
+        "mem_delta_mb": 16.56
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 13,
+          "pred_count": 9,
+          "tp": 8,
+          "fp": 1,
+          "fn": 5,
+          "precision": 0.8889,
+          "recall": 0.6154,
+          "f1": 0.7273
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 3,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.6667,
+          "f1": 0.8
+        },
+        "CREDIT_CARD": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 11,
+          "pred_count": 9,
+          "tp": 9,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.8182,
+          "f1": 0.9
+        },
+        "ECUADOR_RUC": {
+          "gt_count": 3,
+          "pred_count": 3,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 6,
+          "pred_count": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 5,
+          "pred_count": 6,
+          "tp": 5,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.8333,
+          "recall": 1.0,
+          "f1": 0.9091
+        },
+        "IP_ADDRESS": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 3,
+          "pred_count": 3,
+          "tp": 2,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.6667,
+          "recall": 0.6667,
+          "f1": 0.6667
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 18,
+          "pred_count": 28,
+          "tp": 18,
+          "fp": 10,
+          "fn": 0,
+          "precision": 0.6429,
+          "recall": 1.0,
+          "f1": 0.7826
+        },
+        "PHONE": {
+          "gt_count": 6,
+          "pred_count": 13,
+          "tp": 6,
+          "fp": 7,
+          "fn": 0,
+          "precision": 0.4615,
+          "recall": 1.0,
+          "f1": 0.6316
+        },
+        "USERNAME": {
+          "gt_count": 2,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 2,
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "doc_01_comparecencia_notarial",
+          "category": "PERSON",
+          "text": "Notario Vigésimo Primero",
+          "span": [
+            94,
+            118
+          ],
+          "context": "mes de marzo del año 2024, comparece ante mí, el Notario Vigésimo Primero, la señora María Elena Salazar Torres, domiciliad",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "doc_01_comparecencia_notarial",
+          "category": "PERSON",
+          "text": "declara bajo juramento no",
+          "span": [
+            382,
+            407
+          ],
+          "context": "ojuridico.ec y teléfono celular +593998765432. La compareciente declara bajo juramento no adeudar al Servicio de Rentas Internas con RUC 17",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "doc_01_comparecencia_notarial",
+          "category": "PERSON",
+          "text": "Rentas Internas",
+          "span": [
+            431,
+            446
+          ],
+          "context": "declara bajo juramento no adeudar al Servicio de Rentas Internas con RUC 1710034065001.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "PERSON",
+          "text": "JUEZ DE LA UNIDAD",
+          "span": [
+            6,
+            23
+          ],
+          "context": "SEÑOR JUEZ DE LA UNIDAD JUDICIAL DE TRABAJO DE PICHINCHA. Carlos Eduardo",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "PHONE",
+          "text": "0910034068",
+          "span": [
+            107,
+            117
+          ],
+          "context": "Carlos Eduardo Jaramillo Vega, con cédula número 0910034068, con dirección electrónica carlos.jaramillo@litig",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "doc_03_poder_especial",
+          "category": "PERSON",
+          "text": "de la cédula",
+          "span": [
+            103,
+            115
+          ],
+          "context": "favor de la Abg. Gabriela Vanessa Morales Dávila, titular de la cédula 1102345678, con domicilio profesional en Pasaje S",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "doc_04_epicrisis_medica",
+          "category": "PERSON",
+          "text": "refiere dolor precordial de",
+          "span": [
+            240,
+            267
+          ],
+          "context": "terial refractaria y diabetes mellitus tipo 2. El paciente refiere dolor precordial de tres días de evolución. Se prescribe medicación:",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "doc_04_epicrisis_medica",
+          "category": "MEDICAL_DATA",
+          "text": "medicación: Enalapril 20mg cada 12 horas y Metformina 850mg",
+          "span": [
+            305,
+            364
+          ],
+          "context": "recordial de tres días de evolución. Se prescribe medicación: Enalapril 20mg cada 12 horas y Metformina 850mg. Teléfono de contacto de emergencia: 022456789.",
+          "layer": "deterministic",
+          "rule": "Información clínica / médica sensible (sin confirmación semá"
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "PHONE",
+          "text": "220034567890",
+          "span": [
+            206,
+            218
+          ],
+          "context": "Cargo: Analista de Sistemas | Cuenta de ahorros: 220034567890 Sueldo básico unificado: $ 1.250,00 | Aporte pers",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 118,12",
+          "span": [
+            285,
+            293
+          ],
+          "context": "ificado: $ 1.250,00 | Aporte personal IESS 9.45%: $ 118,12 | Total neto a recibir: $ 1.131,88 en cuenta banc",
+          "layer": "semantic",
+          "rule": "GLiNER bi-encoder span (score: 0.74)"
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "PERSON",
+          "text": "Banco Pichincha",
+          "span": [
+            348,
+            363
+          ],
+          "context": "tal neto a recibir: $ 1.131,88 en cuenta bancaria Banco Pichincha.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "doc_08_infraccion_transito",
+          "category": "PERSON",
+          "text": "Simón Bolívar",
+          "span": [
+            241,
+            254
+          ],
+          "context": "ula 1714567890, por exceso de velocidad en la Av. Simón Bolívar intersección con Panamericana Norte. Consultas y",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (solapa con AD"
+        },
+        {
+          "doc_id": "doc_09_permiso_construccion",
+          "category": "VEHICLE_PLATE",
+          "text": "LMU-2024",
+          "span": [
+            88,
+            96
+          ],
+          "context": "E QUITO Se otorga la licencia de construcción No. LMU-2024-8971 al solicitante Rodrigo Esteban Paredes Cueva",
+          "layer": "deterministic",
+          "rule": "Formato de placa vehicular identificado (sin confirmación se"
+        },
+        {
+          "doc_id": "doc_09_permiso_construccion",
+          "category": "ADDRESS",
+          "text": "sector Bellavista",
+          "span": [
+            281,
+            298
+          ],
+          "context": "asaje El Manantial No. 12 y Av. Mariana de Jesús, sector Bellavista. Contacto del proyectista: rodrigo_paredes@arquit",
+          "layer": "deterministic",
+          "rule": "Dirección física con nomenclatura vial (sin confirmación sem"
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "PHONE",
+          "text": "0912345678",
+          "span": [
+            106,
+            116
+          ],
+          "context": "Titular: Patricia Alexandra Moncayo Rivas, cédula 0912345678, pasaporte A1234567, nacida el 28/11/1988 en Guay",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "PHONE",
+          "text": "453201511283034",
+          "span": [
+            237,
+            252
+          ],
+          "context": "a.moncayo@finanzas.com. Tarjeta de pago asignada: 453201511283034. Saldo disponible inicial: $ 3.500,00. Dirección",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "9991234567",
+          "span": [
+            32,
+            42
+          ],
+          "context": "Referencia de inventario código 9991234567 lote técnico 0001234567890. Resolución Administra",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "0001234567890",
+          "span": [
+            56,
+            69
+          ],
+          "context": "ncia de inventario código 9991234567 lote técnico 0001234567890. Resolución Administrativa número 1234-2024 emiti",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PERSON",
+          "text": "Resolución Administrativa",
+          "span": [
+            71,
+            96
+          ],
+          "context": "rio código 9991234567 lote técnico 0001234567890. Resolución Administrativa número 1234-2024 emitida por el Comité Técnico. T",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PERSON",
+          "text": "Comité Técnico",
+          "span": [
+            129,
+            143
+          ],
+          "context": "ón Administrativa número 1234-2024 emitida por el Comité Técnico. Temperatura de calibración 25.5 grados, versión",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "7861001234567",
+          "span": [
+            233,
+            246
+          ],
+          "context": ", versión del firmware 1.0.4. Código de barra EAN 7861001234567 verificado en bodega central.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "doc_01_comparecencia_notarial",
+          "category": "ADDRESS",
+          "text": "Quito",
+          "span": [
+            16,
+            21
+          ]
+        },
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "ADDRESS",
+          "text": "PICHINCHA",
+          "span": [
+            47,
+            56
+          ]
+        },
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "ECUADOR_CEDULA",
+          "text": "0910034068",
+          "span": [
+            107,
+            117
+          ]
+        },
+        {
+          "doc_id": "doc_05_certificado_oncologia",
+          "category": "MEDICAL_DATA",
+          "text": "tratamiento oncológico",
+          "span": [
+            71,
+            93
+          ]
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "BANK_ACCOUNT",
+          "text": "220034567890",
+          "span": [
+            206,
+            218
+          ]
+        },
+        {
+          "doc_id": "doc_07_contrato_prestacion_servicios",
+          "category": "ADDRESS",
+          "text": "Manta",
+          "span": [
+            156,
+            161
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "ECUADOR_CEDULA",
+          "text": "0912345678",
+          "span": [
+            106,
+            116
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "DATE_OF_BIRTH",
+          "text": "28/11/1988",
+          "span": [
+            148,
+            158
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "ADDRESS",
+          "text": "Guayaquil",
+          "span": [
+            162,
+            171
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "CREDIT_CARD",
+          "text": "453201511283034",
+          "span": [
+            237,
+            252
+          ]
+        },
+        {
+          "doc_id": "doc_11_seguridad_informatica",
+          "category": "USERNAME",
+          "text": "sec_specialist",
+          "span": [
+            230,
+            244
+          ]
+        },
+        {
+          "doc_id": "doc_12_acta_entrega_recepcion",
+          "category": "ADDRESS",
+          "text": "Quito",
+          "span": [
+            63,
+            68
+          ]
+        }
+      ],
+      "preservation_violations": [],
+      "ambiguous": [],
+      "person": {
+        "gt_count": 18,
+        "pred_count": 28,
+        "tp": 18,
+        "fp": 10,
+        "fn": 0,
+        "precision": 0.6429,
+        "recall": 1.0,
+        "f1": 0.7826
+      }
+    },
+    "phase1_holdout": {
+      "summary": {
+        "documents_count": 12,
+        "total_words": 699,
+        "total_ground_truth": 60,
+        "total_predictions": 76,
+        "total_tp": 55,
+        "total_fp": 21,
+        "total_fn": 5,
+        "precision": 0.7237,
+        "recall": 0.9167,
+        "f1_score": 0.8088,
+        "fp_per_1000_words": 30.04,
+        "latency_total_ms": 17521.21,
+        "latency_avg_per_doc_ms": 1460.1,
+        "mem_rss_mb": 1793.08,
+        "mem_delta_mb": 18.65
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 6,
+          "pred_count": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.8333,
+          "f1": 0.9091
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 2,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 10,
+          "pred_count": 9,
+          "tp": 9,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.9,
+          "f1": 0.9474
+        },
+        "ECUADOR_RUC": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 5,
+          "pred_count": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 5,
+          "pred_count": 6,
+          "tp": 5,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.8333,
+          "recall": 1.0,
+          "f1": 0.9091
+        },
+        "IP_ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 2,
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 15,
+          "pred_count": 31,
+          "tp": 15,
+          "fp": 16,
+          "fn": 0,
+          "precision": 0.4839,
+          "recall": 1.0,
+          "f1": 0.6522
+        },
+        "PHONE": {
+          "gt_count": 6,
+          "pred_count": 9,
+          "tp": 6,
+          "fp": 3,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        "USERNAME": {
+          "gt_count": 2,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "holdout_01_notificacion_tributaria",
+          "category": "PERSON",
+          "text": "Calle Junín",
+          "span": [
+            256,
+            267
+          ],
+          "context": "716543210001, con domicilio tributario ubicado en Calle Junín 456 y Córdova, piso 3, oficina 302, correo de con",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (solapa con AD"
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PERSON",
+          "text": "Distrito Metropolitano",
+          "span": [
+            6,
+            28
+          ],
+          "context": "En el Distrito Metropolitano, convienen en celebrar el contrato de arrendamien",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PHONE",
+          "text": "0918765432",
+          "span": [
+            240,
+            250
+          ],
+          "context": "dadano Luis Fernando Espinoza Carvajal con cédula 0918765432. El inmueble arrendado se ubica en Urbanización L",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PERSON",
+          "text": "Urbanización Los Helechos",
+          "span": [
+            286,
+            311
+          ],
+          "context": "ula 0918765432. El inmueble arrendado se ubica en Urbanización Los Helechos Mz. B villa 14 y Av. Las Lomas. El canon mensual",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PHONE",
+          "text": "1029384756",
+          "span": [
+            447,
+            457
+          ],
+          "context": "$ 650,00 que se acreditará a la cuenta corriente 1029384756 del Banco Bolivariano. Teléfono de contacto: +593",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PERSON",
+          "text": "Banco Bolivariano",
+          "span": [
+            462,
+            479
+          ],
+          "context": "e acreditará a la cuenta corriente 1029384756 del Banco Bolivariano. Teléfono de contacto: +593984567890.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (solapa con AD"
+        },
+        {
+          "doc_id": "holdout_03_historia_clinica_cirugia",
+          "category": "MEDICAL_DATA",
+          "text": "colecistitis crónica litiásica",
+          "span": [
+            202,
+            232
+          ],
+          "context": "o preoperatorio: Colelitiasis aguda sintomática y colecistitis crónica litiásica. Cirujano tratante: Dr. Marcelo Hernán Córdova Pa",
+          "layer": "semantic",
+          "rule": "GLiNER bi-encoder span (score: 0.76)"
+        },
+        {
+          "doc_id": "holdout_06_control_negativo_resolucion",
+          "category": "PERSON",
+          "text": "Función Judicial",
+          "span": [
+            96,
+            112
+          ],
+          "context": "ibuciones conferidas por el Código Orgánico de la Función Judicial y la Constitución de la República del Ecuador, re",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "holdout_06_control_negativo_resolucion",
+          "category": "PERSON",
+          "text": "Los Juzgados",
+          "span": [
+            230,
+            242
+          ],
+          "context": "sesión extraordinaria el 20 de Noviembre de 2024. Los Juzgados de Garantías Penitenciarias y los Tribunales Dist",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "holdout_06_control_negativo_resolucion",
+          "category": "PERSON",
+          "text": "Garantías Penitenciarias",
+          "span": [
+            246,
+            270
+          ],
+          "context": "naria el 20 de Noviembre de 2024. Los Juzgados de Garantías Penitenciarias y los Tribunales Distritales de lo Contencioso Ad",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "holdout_06_control_negativo_resolucion",
+          "category": "PERSON",
+          "text": "Tribunales Distritales",
+          "span": [
+            277,
+            299
+          ],
+          "context": "4. Los Juzgados de Garantías Penitenciarias y los Tribunales Distritales de lo Contencioso Administrativo adoptarán las me",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "holdout_06_control_negativo_resolucion",
+          "category": "PERSON",
+          "text": "Contencioso Administrativo",
+          "span": [
+            306,
+            332
+          ],
+          "context": "Penitenciarias y los Tribunales Distritales de lo Contencioso Administrativo adoptarán las medidas correspondientes conforme a",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "holdout_06_control_negativo_resolucion",
+          "category": "PERSON",
+          "text": "Memorando Circular",
+          "span": [
+            384,
+            402
+          ],
+          "context": "doptarán las medidas correspondientes conforme al Memorando Circular No. CJ-DG-2024-0099. No se admitirá recurso algun",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica"
+        },
+        {
+          "doc_id": "holdout_07_carta_solicitud_informacion",
+          "category": "PERSON",
+          "text": "Director General del Registro",
+          "span": [
+            6,
+            35
+          ],
+          "context": "Señor Director General del Registro Civil. Yo, Tatiana Jimena Alarcón Morales, portad",
+          "layer": "deterministic",
+          "rule": "Nombre propio precedido de tratamiento honorífico/personal ("
+        },
+        {
+          "doc_id": "holdout_08_acta_asamblea_copropietarios",
+          "category": "PHONE",
+          "text": "4001239876",
+          "span": [
+            393,
+            403
+          ],
+          "context": "ónico nelson.tapia@inmuebles.ec y cuenta bancaria 4001239876.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "holdout_12_control_negativo_compras_publicas",
+          "category": "PERSON",
+          "text": "Servicio Nacional",
+          "span": [
+            3,
+            20
+          ],
+          "context": "El Servicio Nacional de Contratación Pública (SERCOP) publica los plie",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "holdout_12_control_negativo_compras_publicas",
+          "category": "PERSON",
+          "text": "Contratación Pública",
+          "span": [
+            24,
+            44
+          ],
+          "context": "El Servicio Nacional de Contratación Pública (SERCOP) publica los pliegos del proceso de subas",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "holdout_12_control_negativo_compras_publicas",
+          "category": "FINANCIAL_DATA",
+          "text": "partida presupuestaria 530804",
+          "span": [
+            210,
+            239
+          ],
+          "context": "ferencial asignado por el Estado corresponde a la partida presupuestaria 530804 del clasificador central. La Comisión Técnica y l",
+          "layer": "semantic",
+          "rule": "GLiNER bi-encoder span (score: 0.58)"
+        },
+        {
+          "doc_id": "holdout_12_control_negativo_compras_publicas",
+          "category": "PERSON",
+          "text": "Comisión Técnica",
+          "span": [
+            269,
+            285
+          ],
+          "context": "resupuestaria 530804 del clasificador central. La Comisión Técnica y la Gerencia de Compras sesionarán en el auditor",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "holdout_12_control_negativo_compras_publicas",
+          "category": "PERSON",
+          "text": "Sistema Nacional",
+          "span": [
+            404,
+            420
+          ],
+          "context": "ste procedimiento se rige por la Ley Orgánica del Sistema Nacional de Contratación Pública y su Reglamento General.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        },
+        {
+          "doc_id": "holdout_12_control_negativo_compras_publicas",
+          "category": "PERSON",
+          "text": "Reglamento General",
+          "span": [
+            450,
+            468
+          ],
+          "context": "del Sistema Nacional de Contratación Pública y su Reglamento General.",
+          "layer": "deterministic",
+          "rule": "Nombre propio detectado por estructura léxica (sin confirmac"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "holdout_01_notificacion_tributaria",
+          "category": "ADDRESS",
+          "text": "Calle Junín 456 y Córdova, piso 3, oficina 302",
+          "span": [
+            256,
+            302
+          ]
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "ECUADOR_CEDULA",
+          "text": "0918765432",
+          "span": [
+            240,
+            250
+          ]
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "BANK_ACCOUNT",
+          "text": "1029384756",
+          "span": [
+            447,
+            457
+          ]
+        },
+        {
+          "doc_id": "holdout_05_investigacion_forense",
+          "category": "USERNAME",
+          "text": "dark_operator",
+          "span": [
+            289,
+            302
+          ]
+        },
+        {
+          "doc_id": "holdout_08_acta_asamblea_copropietarios",
+          "category": "BANK_ACCOUNT",
+          "text": "4001239876",
+          "span": [
+            393,
+            403
+          ]
+        }
+      ],
+      "preservation_violations": [],
+      "ambiguous": [],
+      "person": {
+        "gt_count": 15,
+        "pred_count": 31,
+        "tp": 15,
+        "fp": 16,
+        "fn": 0,
+        "precision": 0.4839,
+        "recall": 1.0,
+        "f1": 0.6522
+      }
+    }
+  }
+}

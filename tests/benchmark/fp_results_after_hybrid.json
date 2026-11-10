@@ -1,0 +1,1039 @@
+{
+  "label": "after_hybrid",
+  "detector": "composite_gliner",
+  "datasets": {
+    "fp_tuning": {
+      "summary": {
+        "documents_count": 10,
+        "total_words": 364,
+        "total_ground_truth": 28,
+        "total_predictions": 27,
+        "total_tp": 27,
+        "total_fp": 0,
+        "total_fn": 1,
+        "precision": 1.0,
+        "recall": 0.9643,
+        "f1_score": 0.9818,
+        "fp_per_1000_words": 0.0,
+        "latency_total_ms": 12896.71,
+        "latency_avg_per_doc_ms": 1289.67,
+        "mem_rss_mb": 1760.15,
+        "mem_delta_mb": 68.7
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 8,
+          "pred_count": 8,
+          "tp": 8,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "PERSON": {
+          "gt_count": 11,
+          "pred_count": 11,
+          "tp": 11,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PHONE": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [],
+      "false_negatives": [
+        {
+          "doc_id": "fp_tune_07_identificadores_con_expresion",
+          "category": "PASSPORT",
+          "text": "PA1234567",
+          "span": [
+            138,
+            147
+          ]
+        }
+      ],
+      "preservation_violations": [],
+      "ambiguous": [
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "text": "458921",
+          "detected_as": []
+        },
+        {
+          "doc_id": "fp_tune_03_matricula_afiliacion",
+          "text": "7745123",
+          "detected_as": []
+        }
+      ],
+      "person": {
+        "gt_count": 11,
+        "pred_count": 11,
+        "tp": 11,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "fp_holdout": {
+      "summary": {
+        "documents_count": 10,
+        "total_words": 328,
+        "total_ground_truth": 26,
+        "total_predictions": 29,
+        "total_tp": 25,
+        "total_fp": 4,
+        "total_fn": 1,
+        "precision": 0.8621,
+        "recall": 0.9615,
+        "f1_score": 0.9091,
+        "fp_per_1000_words": 12.2,
+        "latency_total_ms": 12552.51,
+        "latency_avg_per_doc_ms": 1255.25,
+        "mem_rss_mb": 1764.71,
+        "mem_delta_mb": 4.55
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 3,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 7,
+          "pred_count": 8,
+          "tp": 7,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.875,
+          "recall": 1.0,
+          "f1": 0.9333
+        },
+        "EMAIL": {
+          "gt_count": 2,
+          "pred_count": 3,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 10,
+          "pred_count": 10,
+          "tp": 10,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PHONE": {
+          "gt_count": 1,
+          "pred_count": 2,
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "ECUADOR_CEDULA",
+          "text": "2201938475",
+          "span": [
+            174,
+            184
+          ],
+          "context": "o de Talento Humano registra su cuenta de ahorros 2201938475 y un sueldo de $ 1.250,00. Teléfono de contacto:",
+          "layer": "deterministic",
+          "rule": "Cédula ecuatoriana válida"
+        },
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "PHONE",
+          "text": "593 99 876 5432",
+          "span": [
+            235,
+            250
+          ],
+          "context": "y un sueldo de $ 1.250,00. Teléfono de contacto: +593 99 876 5432.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "fp_hold_08_acta_comparecencia",
+          "category": "ADDRESS",
+          "text": "sector Carolina. Atestigua la Directora Nacional de Servicios.",
+          "span": [
+            209,
+            271
+          ],
+          "context": "alama Gómez, domicilio Calle Bolívar y Sucre S/N, sector Carolina. Atestigua la Directora Nacional de Servicios.",
+          "layer": "deterministic",
+          "rule": "Dirección física con nomenclatura vial (sin confirmación sem"
+        },
+        {
+          "doc_id": "fp_hold_10_identificadores",
+          "category": "EMAIL",
+          "text": "notificaciones@iess.gob.ec",
+          "span": [
+            167,
+            193
+          ],
+          "context": "nstituto de Seguridad Social, dirección de correo notificaciones@iess.gob.ec no personal.",
+          "layer": "deterministic",
+          "rule": "Sintaxis de correo válida"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "category": "BANK_ACCOUNT",
+          "text": "2201938475",
+          "span": [
+            174,
+            184
+          ]
+        }
+      ],
+      "preservation_violations": [
+        {
+          "doc_id": "fp_hold_08_acta_comparecencia",
+          "preserved": "Directora Nacional de Servicios",
+          "category": "ADDRESS",
+          "text": "sector Carolina. Atestigua la Directora Nacional de Servicios.",
+          "layer": "deterministic"
+        }
+      ],
+      "ambiguous": [
+        {
+          "doc_id": "fp_hold_06_contrato_laboral",
+          "text": "+593 99 876 5432",
+          "detected_as": [
+            "PHONE:593 99 876 5432"
+          ]
+        },
+        {
+          "doc_id": "fp_hold_10_identificadores",
+          "text": "notificaciones@iess.gob.ec",
+          "detected_as": [
+            "EMAIL:notificaciones@iess.gob.ec"
+          ]
+        }
+      ],
+      "person": {
+        "gt_count": 10,
+        "pred_count": 10,
+        "tp": 10,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "phase0": {
+      "summary": {
+        "documents_count": 15,
+        "total_words": 842,
+        "total_ground_truth": 76,
+        "total_predictions": 75,
+        "total_tp": 64,
+        "total_fp": 11,
+        "total_fn": 12,
+        "precision": 0.8533,
+        "recall": 0.8421,
+        "f1_score": 0.8477,
+        "fp_per_1000_words": 13.06,
+        "latency_total_ms": 22241.65,
+        "latency_avg_per_doc_ms": 1482.78,
+        "mem_rss_mb": 1777.48,
+        "mem_delta_mb": 12.77
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 13,
+          "pred_count": 10,
+          "tp": 8,
+          "fp": 2,
+          "fn": 5,
+          "precision": 0.8,
+          "recall": 0.6154,
+          "f1": 0.6957
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 3,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.6667,
+          "f1": 0.8
+        },
+        "CREDIT_CARD": {
+          "gt_count": 1,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 11,
+          "pred_count": 9,
+          "tp": 9,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.8182,
+          "f1": 0.9
+        },
+        "ECUADOR_RUC": {
+          "gt_count": 3,
+          "pred_count": 3,
+          "tp": 3,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 6,
+          "pred_count": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 5,
+          "pred_count": 6,
+          "tp": 5,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.8333,
+          "recall": 1.0,
+          "f1": 0.9091
+        },
+        "IP_ADDRESS": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 3,
+          "pred_count": 3,
+          "tp": 2,
+          "fp": 1,
+          "fn": 1,
+          "precision": 0.6667,
+          "recall": 0.6667,
+          "f1": 0.6667
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 18,
+          "pred_count": 18,
+          "tp": 18,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PHONE": {
+          "gt_count": 6,
+          "pred_count": 13,
+          "tp": 6,
+          "fp": 7,
+          "fn": 0,
+          "precision": 0.4615,
+          "recall": 1.0,
+          "f1": 0.6316
+        },
+        "USERNAME": {
+          "gt_count": 2,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "PHONE",
+          "text": "0910034068",
+          "span": [
+            107,
+            117
+          ],
+          "context": "Carlos Eduardo Jaramillo Vega, con cédula número 0910034068, con dirección electrónica carlos.jaramillo@litig",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "doc_04_epicrisis_medica",
+          "category": "MEDICAL_DATA",
+          "text": "medicación: Enalapril 20mg cada 12 horas y Metformina 850mg",
+          "span": [
+            305,
+            364
+          ],
+          "context": "recordial de tres días de evolución. Se prescribe medicación: Enalapril 20mg cada 12 horas y Metformina 850mg. Teléfono de contacto de emergencia: 022456789.",
+          "layer": "deterministic",
+          "rule": "Información clínica / médica sensible (sin confirmación semá"
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "PHONE",
+          "text": "220034567890",
+          "span": [
+            206,
+            218
+          ],
+          "context": "Cargo: Analista de Sistemas | Cuenta de ahorros: 220034567890 Sueldo básico unificado: $ 1.250,00 | Aporte pers",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "FINANCIAL_DATA",
+          "text": "$ 118,12",
+          "span": [
+            285,
+            293
+          ],
+          "context": "ificado: $ 1.250,00 | Aporte personal IESS 9.45%: $ 118,12 | Total neto a recibir: $ 1.131,88 en cuenta banc",
+          "layer": "semantic",
+          "rule": "GLiNER bi-encoder span (score: 0.74)"
+        },
+        {
+          "doc_id": "doc_08_infraccion_transito",
+          "category": "ADDRESS",
+          "text": "intersección con Panamericana Norte",
+          "span": [
+            255,
+            290
+          ],
+          "context": ", por exceso de velocidad en la Av. Simón Bolívar intersección con Panamericana Norte. Consultas y apelaciones al portal institucional",
+          "layer": "deterministic",
+          "rule": "Dirección física con nomenclatura vial (sin confirmación sem"
+        },
+        {
+          "doc_id": "doc_09_permiso_construccion",
+          "category": "ADDRESS",
+          "text": "sector Bellavista",
+          "span": [
+            281,
+            298
+          ],
+          "context": "asaje El Manantial No. 12 y Av. Mariana de Jesús, sector Bellavista. Contacto del proyectista: rodrigo_paredes@arquit",
+          "layer": "deterministic",
+          "rule": "Dirección física con nomenclatura vial (sin confirmación sem"
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "PHONE",
+          "text": "0912345678",
+          "span": [
+            106,
+            116
+          ],
+          "context": "Titular: Patricia Alexandra Moncayo Rivas, cédula 0912345678, pasaporte A1234567, nacida el 28/11/1988 en Guay",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "PHONE",
+          "text": "453201511283034",
+          "span": [
+            237,
+            252
+          ],
+          "context": "a.moncayo@finanzas.com. Tarjeta de pago asignada: 453201511283034. Saldo disponible inicial: $ 3.500,00. Dirección",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "9991234567",
+          "span": [
+            32,
+            42
+          ],
+          "context": "Referencia de inventario código 9991234567 lote técnico 0001234567890. Resolución Administra",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "0001234567890",
+          "span": [
+            56,
+            69
+          ],
+          "context": "ncia de inventario código 9991234567 lote técnico 0001234567890. Resolución Administrativa número 1234-2024 emiti",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        },
+        {
+          "doc_id": "doc_14_control_falsos_positivos_numeros",
+          "category": "PHONE",
+          "text": "7861001234567",
+          "span": [
+            233,
+            246
+          ],
+          "context": ", versión del firmware 1.0.4. Código de barra EAN 7861001234567 verificado en bodega central.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "doc_01_comparecencia_notarial",
+          "category": "ADDRESS",
+          "text": "Quito",
+          "span": [
+            16,
+            21
+          ]
+        },
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "ADDRESS",
+          "text": "PICHINCHA",
+          "span": [
+            47,
+            56
+          ]
+        },
+        {
+          "doc_id": "doc_02_demanda_laboral",
+          "category": "ECUADOR_CEDULA",
+          "text": "0910034068",
+          "span": [
+            107,
+            117
+          ]
+        },
+        {
+          "doc_id": "doc_05_certificado_oncologia",
+          "category": "MEDICAL_DATA",
+          "text": "tratamiento oncológico",
+          "span": [
+            71,
+            93
+          ]
+        },
+        {
+          "doc_id": "doc_06_rol_pago",
+          "category": "BANK_ACCOUNT",
+          "text": "220034567890",
+          "span": [
+            206,
+            218
+          ]
+        },
+        {
+          "doc_id": "doc_07_contrato_prestacion_servicios",
+          "category": "ADDRESS",
+          "text": "Manta",
+          "span": [
+            156,
+            161
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "ECUADOR_CEDULA",
+          "text": "0912345678",
+          "span": [
+            106,
+            116
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "DATE_OF_BIRTH",
+          "text": "28/11/1988",
+          "span": [
+            148,
+            158
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "ADDRESS",
+          "text": "Guayaquil",
+          "span": [
+            162,
+            171
+          ]
+        },
+        {
+          "doc_id": "doc_10_solicitud_credito",
+          "category": "CREDIT_CARD",
+          "text": "453201511283034",
+          "span": [
+            237,
+            252
+          ]
+        },
+        {
+          "doc_id": "doc_11_seguridad_informatica",
+          "category": "USERNAME",
+          "text": "sec_specialist",
+          "span": [
+            230,
+            244
+          ]
+        },
+        {
+          "doc_id": "doc_12_acta_entrega_recepcion",
+          "category": "ADDRESS",
+          "text": "Quito",
+          "span": [
+            63,
+            68
+          ]
+        }
+      ],
+      "preservation_violations": [],
+      "ambiguous": [],
+      "person": {
+        "gt_count": 18,
+        "pred_count": 18,
+        "tp": 18,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "phase1_holdout": {
+      "summary": {
+        "documents_count": 12,
+        "total_words": 699,
+        "total_ground_truth": 60,
+        "total_predictions": 61,
+        "total_tp": 56,
+        "total_fp": 5,
+        "total_fn": 4,
+        "precision": 0.918,
+        "recall": 0.9333,
+        "f1_score": 0.9256,
+        "fp_per_1000_words": 7.15,
+        "latency_total_ms": 18178.5,
+        "latency_avg_per_doc_ms": 1514.88,
+        "mem_rss_mb": 1791.01,
+        "mem_delta_mb": 13.53
+      },
+      "by_category": {
+        "ADDRESS": {
+          "gt_count": 6,
+          "pred_count": 6,
+          "tp": 6,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "BANK_ACCOUNT": {
+          "gt_count": 2,
+          "pred_count": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        },
+        "DATE_OF_BIRTH": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "ECUADOR_CEDULA": {
+          "gt_count": 10,
+          "pred_count": 9,
+          "tp": 9,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.9,
+          "f1": 0.9474
+        },
+        "ECUADOR_RUC": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "EMAIL": {
+          "gt_count": 5,
+          "pred_count": 5,
+          "tp": 5,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "FINANCIAL_DATA": {
+          "gt_count": 5,
+          "pred_count": 6,
+          "tp": 5,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.8333,
+          "recall": 1.0,
+          "f1": 0.9091
+        },
+        "IP_ADDRESS": {
+          "gt_count": 2,
+          "pred_count": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "MEDICAL_DATA": {
+          "gt_count": 1,
+          "pred_count": 2,
+          "tp": 1,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.5,
+          "recall": 1.0,
+          "f1": 0.6667
+        },
+        "PASSPORT": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PERSON": {
+          "gt_count": 15,
+          "pred_count": 15,
+          "tp": 15,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        },
+        "PHONE": {
+          "gt_count": 6,
+          "pred_count": 9,
+          "tp": 6,
+          "fp": 3,
+          "fn": 0,
+          "precision": 0.6667,
+          "recall": 1.0,
+          "f1": 0.8
+        },
+        "USERNAME": {
+          "gt_count": 2,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
+          "f1": 0.6667
+        },
+        "VEHICLE_PLATE": {
+          "gt_count": 1,
+          "pred_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "false_positives": [
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PHONE",
+          "text": "0918765432",
+          "span": [
+            240,
+            250
+          ],
+          "context": "dadano Luis Fernando Espinoza Carvajal con cédula 0918765432. El inmueble arrendado se ubica en Urbanización L",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "PHONE",
+          "text": "1029384756",
+          "span": [
+            447,
+            457
+          ],
+          "context": "$ 650,00 que se acreditará a la cuenta corriente 1029384756 del Banco Bolivariano. Teléfono de contacto: +593",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "holdout_03_historia_clinica_cirugia",
+          "category": "MEDICAL_DATA",
+          "text": "colecistitis crónica litiásica",
+          "span": [
+            202,
+            232
+          ],
+          "context": "o preoperatorio: Colelitiasis aguda sintomática y colecistitis crónica litiásica. Cirujano tratante: Dr. Marcelo Hernán Córdova Pa",
+          "layer": "semantic",
+          "rule": "GLiNER bi-encoder span (score: 0.76)"
+        },
+        {
+          "doc_id": "holdout_08_acta_asamblea_copropietarios",
+          "category": "PHONE",
+          "text": "4001239876",
+          "span": [
+            393,
+            403
+          ],
+          "context": "ónico nelson.tapia@inmuebles.ec y cuenta bancaria 4001239876.",
+          "layer": "deterministic",
+          "rule": "Número telefónico identificado (sin confirmación semántica)"
+        },
+        {
+          "doc_id": "holdout_12_control_negativo_compras_publicas",
+          "category": "FINANCIAL_DATA",
+          "text": "partida presupuestaria 530804",
+          "span": [
+            210,
+            239
+          ],
+          "context": "ferencial asignado por el Estado corresponde a la partida presupuestaria 530804 del clasificador central. La Comisión Técnica y l",
+          "layer": "semantic",
+          "rule": "GLiNER bi-encoder span (score: 0.58)"
+        }
+      ],
+      "false_negatives": [
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "ECUADOR_CEDULA",
+          "text": "0918765432",
+          "span": [
+            240,
+            250
+          ]
+        },
+        {
+          "doc_id": "holdout_02_contrato_arrendamiento",
+          "category": "BANK_ACCOUNT",
+          "text": "1029384756",
+          "span": [
+            447,
+            457
+          ]
+        },
+        {
+          "doc_id": "holdout_05_investigacion_forense",
+          "category": "USERNAME",
+          "text": "dark_operator",
+          "span": [
+            289,
+            302
+          ]
+        },
+        {
+          "doc_id": "holdout_08_acta_asamblea_copropietarios",
+          "category": "BANK_ACCOUNT",
+          "text": "4001239876",
+          "span": [
+            393,
+            403
+          ]
+        }
+      ],
+      "preservation_violations": [],
+      "ambiguous": [],
+      "person": {
+        "gt_count": 15,
+        "pred_count": 15,
+        "tp": 15,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    }
+  }
+}
