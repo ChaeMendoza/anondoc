@@ -5,6 +5,7 @@ Performs zero-shot span extraction on CPU with strict textual groundedness verif
 """
 import concurrent.futures
 import logging
+import os
 import threading
 import uuid
 from typing import Any, Dict, List, Optional
@@ -42,14 +43,18 @@ class GLiNERDetector(IPIIDetector):
         threshold: float = 0.50,
         labels_map: Optional[Dict[str, EntityCategory]] = None,
         device: str = "cpu",
-        inference_timeout_seconds: Optional[float] = 10.0,
+        inference_timeout_seconds: Optional[float] = None,
     ):
         self.model_name = model_name
         self.threshold = threshold
         self.labels_map = labels_map or DEFAULT_SPAN_MAP
         self.labels = list(self.labels_map.keys())
         self.device = device
-        self.inference_timeout_seconds = inference_timeout_seconds
+        self.inference_timeout_seconds = (
+            inference_timeout_seconds
+            if inference_timeout_seconds is not None
+            else float(os.getenv("ANONDOC_GLINER_TIMEOUT", "180.0"))
+        )
         self._model = None
         self._load_model()
         # Bounded admission: at most 1 active/pending inference per instance.
