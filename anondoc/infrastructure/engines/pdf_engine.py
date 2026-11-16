@@ -72,9 +72,36 @@ class PDFEngine(IDocumentExtractor, IDocumentAnonymizer):
         try:
             located = set()
             for page in doc:
+                page_text_norm = _norm(page.get_text("text"))
                 for entity in selected:
                     orig = entity.original_text.strip()
-                    rects = page.search_for(orig)
+                    norm_orig = re.sub(r"\s+", " ", orig).strip()
+                    dehyph = re.sub(r"-\s+", "", orig).strip()
+                    if not norm_orig or (norm_orig.lower() not in page_text_norm and dehyph.lower() not in page_text_norm):
+                        continue
+                    candidates = list(dict.fromkeys([
+                        orig,
+                        orig.upper(),
+                        orig.lower(),
+                        orig.title(),
+                        norm_orig,
+                        norm_orig.upper(),
+                        norm_orig.lower(),
+                        norm_orig.title(),
+                        dehyph,
+                        dehyph.upper(),
+                        dehyph.lower(),
+                        dehyph.title(),
+                    ]))
+                    rects = []
+                    seen_rects = set()
+                    for cand in candidates:
+                        if cand:
+                            for r in page.search_for(cand):
+                                key = (round(r.x0, 2), round(r.y0, 2), round(r.x1, 2), round(r.y1, 2))
+                                if key not in seen_rects:
+                                    seen_rects.add(key)
+                                    rects.append(r)
                     if not rects:
                         continue
                     located.add(entity.id)
